@@ -1,0 +1,47 @@
+@font-face {
+	font-family: "torus";
+	src: url("../font/TorusPro-Thin.ttf");
+	font-display: swap;
+	font-weight: 200;
+}
+
+@font-face {
+	font-family: "torus";
+	src: url("../font/TorusPro-Light.ttf");
+	font-display: swap;
+	font-weight: 300;
+}
+
+@font-face {
+	font-family: "torus";
+	src: url("../font/TorusPro-Regular.ttf");
+	font-display: swap;
+	font-weight: 500;
+}
+
+@font-face {
+	font-family: "torus";
+	src: url("../font/TorusPro-SemiBold.ttf");
+	font-display: swap;
+	font-weight: 700;
+}
+
+@font-face {
+	font-family: "torus";
+	src: url("../font/TorusPro-Bold.ttf");
+	font-display: swap;
+	font-weight: 800;
+}
+
+@font-face {
+	font-family: "torus";
+	src: url("../font/TorusPro-Heavy.ttf");
+	font-display: swap;
+	font-weight: 900;
+}
+
+@font-face {
+	font-family: "puhui";
+	src: url("../font/AlibabaPuHuiTi-3-55-Regular.ttf");
+	font-display: swap;
+}

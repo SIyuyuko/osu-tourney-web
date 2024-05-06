@@ -1,0 +1,10 @@
+[data-theme='dark'] {
+
+	.ant-layout-header,
+	.ant-layout-content {
+		background: #141414;
+	}
+	.logo{
+		border-inline-end:1px solid rgba(253, 253, 253, 0.12);
+	}
+}
