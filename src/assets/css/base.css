@@ -5,10 +5,10 @@
 *::after {
   box-sizing: border-box;
   margin: 0;
-  font-weight:500;
+  font-weight: 500;
   font-family:
-    torus,
-    puhui,
+    TorusSemiBold,
+    Puhui,
     Inter,
     -apple-system,
     BlinkMacSystemFont,
@@ -31,6 +31,7 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
 }
 
 #app {

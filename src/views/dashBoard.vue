@@ -2,7 +2,7 @@
  * @Author: SIyuyuko
  * @Date: 2024-04-28 16:43:45
  * @LastEditors: SIyuyuko
- * @LastEditTime: 2024-05-07 02:06:07
+ * @LastEditTime: 2024-05-07 02:49:01
  * @FilePath: /tourney-site/src/views/dashboard.vue
  * @Description: 项目主页面
 -->
@@ -12,7 +12,7 @@
       <Sider></Sider>
       <a-layout>
         <Header></Header>
-        <a-layout-content :style="{ margin: '25px 15px', padding: '20px', minHeight: '280px' }">
+        <a-layout-content>
           <keep-alive>
             <component :is="current"></component>
           </keep-alive>
@@ -51,4 +51,12 @@ watch(selectMenu, (val) => {
   loadView(val);
 });
 </script>
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.ant-layout-content {
+  margin: 25px 15px;
+  padding: 20px;
+  min-height: 280px;
+  overflow: auto;
+  border-radius: 10px;
+}
+</style>
