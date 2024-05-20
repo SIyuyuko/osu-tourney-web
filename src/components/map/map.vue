@@ -2,7 +2,7 @@
  * @Author: SIyuyuko
  * @Date: 2024-05-07 22:17:45
  * @LastEditors: SIyuyuko
- * @LastEditTime: 2024-05-10 15:45:30
+ * @LastEditTime: 2024-05-11 13:55:41
  * @FilePath: /osu!tourney-site/tourney-site/src/components/map/map.vue
  * @Description: 谱面组件
 -->
@@ -26,7 +26,7 @@
             </div>
             <div class="star">
               <span>{{ item.star.toString().split('.')[0] }}<span v-if="item.star.toString().split('.')[1]">{{ '.' +
-                item.star.toString().split('.')[1] }}</span>*
+                  item.star.toString().split('.')[1] }}</span>*
               </span>
             </div>
           </div>
@@ -37,7 +37,7 @@
     <!-- #region 快捷按钮组 -->
     <template #actions>
       <div class="website-btn" title="查看官网谱面信息" @click="openBeatmapWebsite(item.data.id)">
-        <font-awesome-icon icon="fa-solid fa-share-from-square"></font-awesome-icon>
+        <font-awesome-icon icon="fa-solid fa-link" ></font-awesome-icon>
       </div>
       <div class="copy-btn" title="复制谱面ID" @click="copyBeatmapID(item)">
         <font-awesome-icon icon="fa-solid fa-copy" v-show="!item.isCopied"></font-awesome-icon>
