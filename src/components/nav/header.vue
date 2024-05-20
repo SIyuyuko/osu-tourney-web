@@ -2,7 +2,7 @@
  * @Author: SIyuyuko
  * @Date: 2024-05-06 15:55:22
  * @LastEditors: SIyuyuko
- * @LastEditTime: 2024-05-07 20:07:45
+ * @LastEditTime: 2024-05-20 17:56:29
  * @FilePath: /tourney-site/src/components/nav/header.vue
  * @Description: 页头导航栏
 -->
@@ -28,6 +28,10 @@
       </a-button>
     </div>
     <div class="user-header">
+      <a-button type="link" @click="login()">
+        <font-awesome-icon icon="fa-solid fa-arrow-right-to-bracket" />
+      </a-button>
+      <!-- <font-awesome-icon icon="fa-solid fa-arrow-right-from-bracket" /> -->
       <a-button type="link">
         <font-awesome-icon icon="fa-solid fa-gear" />
       </a-button>
@@ -35,8 +39,9 @@
   </a-layout-header>
 </template>
 <script setup name="Header">
-import { inject,ref } from 'vue';
+import { inject, ref } from 'vue';
 import Menu from './menu.vue';
+import { getOauthUrl } from '@/api/data_api';
 let theme = inject('themeMode');
 let collapsed = inject('collapsed');
 let mobileCollapsed = ref(false);
@@ -44,6 +49,14 @@ let mobileCollapsed = ref(false);
 // 切换主题
 function toggleTheme() {
   theme.value = theme.value === 'light' ? 'dark' : 'light';
+}
+
+// 登录
+function login() {
+  getOauthUrl().then((res) => {
+    console.log(res);
+    // window.open()
+  })
 }
 </script>
 <style lang="scss" scoped>
@@ -61,12 +74,13 @@ function toggleTheme() {
     margin: 0 0 0 auto;
     align-items: center;
     vertical-align: middle;
-    column-gap: 20px;
   }
 }
+
 .collapse-btn-mobile {
   display: none;
 }
+
 @media (max-width: 1024px) {
   .ant-layout-header {
     position: sticky;
@@ -74,9 +88,11 @@ function toggleTheme() {
     top: 0;
     z-index: 1;
   }
+
   .collapse-btn {
     display: none;
   }
+
   .collapse-btn-mobile {
     display: block;
   }
