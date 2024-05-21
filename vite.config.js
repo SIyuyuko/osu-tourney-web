@@ -16,6 +16,7 @@ export default defineConfig({
   // 代理配置
   server: {
     host: '0.0.0.0',
+    // https:true,
     cors: true,
     port: 5173,
     open: true,
@@ -27,4 +28,7 @@ export default defineConfig({
       },
     },
   },
+  esbuild: {
+    drop:["console","debugger"]
+  }
 });

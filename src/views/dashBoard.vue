@@ -2,8 +2,8 @@
  * @Author: SIyuyuko
  * @Date: 2024-04-28 16:43:45
  * @LastEditors: SIyuyuko
- * @LastEditTime: 2024-05-07 02:49:01
- * @FilePath: /tourney-site/src/views/dashboard.vue
+ * @LastEditTime: 2024-05-21 13:59:28
+ * @FilePath: /tourney-site/src/views/dashBoard.vue
  * @Description: 项目主页面
 -->
 <template>
@@ -28,6 +28,10 @@ import Home from './home/index.vue';
 import Tournament from './tournament/index.vue';
 import Mappool from './mappool/index.vue';
 import { inject, ref, shallowRef, watch, onBeforeMount } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
+import { login } from '@/api/data_api.js';
+const route = useRoute();
+const router = useRouter();
 let theme = inject('themeMode');
 let selectMenu = inject('current');
 let current = shallowRef();
@@ -44,12 +48,35 @@ function loadView(val) {
     }
   }
 }
+// 用户登录
+function log(token) {
+  login(token).then((res) => {
+    if (res.data.data) {
+      let data = JSON.stringify(res.data.data);
+      localStorage.setItem('userKey', data);
+      window.alert('登录成功！');
+      router.push('/');
+    }
+  });
+}
 onBeforeMount(() => {
   loadView(selectMenu.value);
 });
 watch(selectMenu, (val) => {
   loadView(val);
 });
+watch(
+  route,
+  (val) => {
+    if (val.query.code) {
+      log(val.query.code);
+    }
+  },
+  {
+    deep: true,
+    immediate: true,
+  }
+);
 </script>
 <style lang="scss" scoped>
 .ant-layout-content {

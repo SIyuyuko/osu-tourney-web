@@ -2,7 +2,7 @@
  * @Author: SIyuyuko
  * @Date: 2024-05-06 15:55:22
  * @LastEditors: SIyuyuko
- * @LastEditTime: 2024-05-20 17:56:29
+ * @LastEditTime: 2024-05-21 14:06:27
  * @FilePath: /tourney-site/src/components/nav/header.vue
  * @Description: 页头导航栏
 -->
@@ -28,10 +28,12 @@
       </a-button>
     </div>
     <div class="user-header">
-      <a-button type="link" @click="login()">
+      <a-button v-if="!isLogin" type="link" @click="login()">
         <font-awesome-icon icon="fa-solid fa-arrow-right-to-bracket" />
       </a-button>
-      <!-- <font-awesome-icon icon="fa-solid fa-arrow-right-from-bracket" /> -->
+      <a-button v-else type="link">
+      <font-awesome-icon icon="fa-solid fa-arrow-right-from-bracket" />
+      </a-button>
       <a-button type="link">
         <font-awesome-icon icon="fa-solid fa-gear" />
       </a-button>
@@ -39,12 +41,13 @@
   </a-layout-header>
 </template>
 <script setup name="Header">
-import { inject, ref } from 'vue';
+import { inject, ref,onBeforeMount } from 'vue';
 import Menu from './menu.vue';
 import { getOauthUrl } from '@/api/data_api';
 let theme = inject('themeMode');
 let collapsed = inject('collapsed');
 let mobileCollapsed = ref(false);
+let isLogin = ref(false);
 
 // 切换主题
 function toggleTheme() {
@@ -54,10 +57,18 @@ function toggleTheme() {
 // 登录
 function login() {
   getOauthUrl().then((res) => {
-    console.log(res);
-    // window.open()
+    if (res.data.code === 200) {
+      let oauthUrl = res.data.message;
+      window.open(oauthUrl);
+    }
   })
 }
+
+onBeforeMount(() => {
+  if (localStorage.getItem('userKey')) {
+    isLogin.value = true;
+  }
+})
 </script>
 <style lang="scss" scoped>
 .ant-layout-header {

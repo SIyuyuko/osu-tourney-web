@@ -5,9 +5,14 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: ()=> import('@/views/dashBoard.vue')
+      component: () => import('@/views/dashBoard.vue'),
     },
-  ]
-})
+    {
+      path: '/bind',
+      name: 'bind',
+      component: () => import('@/views/bind.vue'),
+    },
+  ],
+});
 
 export default router

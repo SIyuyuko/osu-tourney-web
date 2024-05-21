@@ -2,7 +2,7 @@
  * @Author: SIyuyuko
  * @Date: 2024-05-14 16:15:55
  * @LastEditors: SIyuyuko
- * @LastEditTime: 2024-05-14 18:11:49
+ * @LastEditTime: 2024-05-21 14:14:19
  * @FilePath: /tourney-site/src/views/mappool/poolList.vue
  * @Description: 图池列表组件
 -->
@@ -24,19 +24,8 @@ const data = [
 		title: '新建图池',
 	},
 	{
-		title: 'Title 2',
+		title: "Yuyuko's Hidden Cup Season 4",
 	},
-	{
-		title: 'Title 3',
-	},
-	{
-		title: 'Title 4',
-	}, {
-		title: 'Title 1',
-	},
-	{
-		title: 'Title 2',
-	}
 ];
 
 </script>

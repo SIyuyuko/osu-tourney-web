@@ -2,7 +2,7 @@
  * @Author: SIyuyuko
  * @Date: 2024-05-07 01:54:03
  * @LastEditors: SIyuyuko
- * @LastEditTime: 2024-05-14 18:04:42
+ * @LastEditTime: 2024-05-21 14:56:44
  * @FilePath: /tourney-site/src/views/mappool/index.vue
  * @Description: 图池页面组件
 -->
@@ -14,14 +14,14 @@
 					<a v-if="curPage !== 'list'">图池列表</a>
 					<span v-else>图池列表</span>
 				</a-breadcrumb-item>
-				<a-breadcrumb-item v-if="curPage === 'mappool'">图池1</a-breadcrumb-item>
+				<a-breadcrumb-item v-if="curPage === 'mappool'">{{ poolTitle }}</a-breadcrumb-item>
 				<a-breadcrumb-item v-if="curPage === 'add'">添加图池</a-breadcrumb-item>
 			</a-breadcrumb>
 		</div>
 		<div class="view">
-			<keep-alive>
+			<!-- <keep-alive> -->
 				<component :is="current"></component>
-			</keep-alive>
+			<!-- </keep-alive> -->
 		</div>
 	</div>
 </template>
@@ -37,13 +37,17 @@ let menu = ref([
 	{ name: 'mappool', component: shallowRef(poolView) },
 	{ name: 'add', component: shallowRef(addPool) },
 ]);
+let poolTitle = ref("Mappool");
 provide("changeCurPage", changeCurPage);
 // 切换页面
-function changeCurPage(page) {
+function changeCurPage(page,data) {
 	curPage.value = page;
 	for (let item of menu.value) {
 		if (item.name === page) {
 			current.value = item.component;
+			if (data) {
+				poolTitle.value = data.title;
+			}
 		}
 	}
 }
