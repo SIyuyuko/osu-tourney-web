@@ -2,7 +2,7 @@
  * @Author: SIyuyuko
  * @Date: 2024-05-07 16:42:54
  * @LastEditors: SIyuyuko
- * @LastEditTime: 2024-05-10 15:48:55
+ * @LastEditTime: 2024-07-29 16:44:59
  * @FilePath: /osu!tourney-site/tourney-site/src/components/util/coutdown.vue
  * @Description: 倒计时组件
 -->
@@ -13,17 +13,23 @@
         :class="isFinished ? 'finished' : ''">
         <template #title>
           <span class="title-prefix">Next Event:</span>
-          <span class="title">Yuyuko's Hidden Cup Season 5</span>
+          <a-tooltip placement="bottom">
+            <template #title>
+              <span><font-awesome-icon icon="fa-regular fa-clock" /> {{ banner.eventTime
+                }}</span>
+            </template>
+            <span class="title"><font-awesome-icon icon="fa-solid fa-calendar-days" /> {{ banner.event }}</span>
+          </a-tooltip>
         </template>
         <template #prefix>
           <font-awesome-icon class="countdown-prefix" icon="fa-regular fa-hourglass-half" />
         </template>
         <template #suffix>
-          <span>Time is over.</span>
+          <span>{{ banner.eventEndTips }}</span>
         </template>
       </a-statistic-countdown>
     </div>
-    <div class="operate-button-group">
+    <!-- <div class="operate-button-group">
       <a-button type="text" title="配置事件">
         <font-awesome-icon icon="fa-solid fa-wrench" rotation="270" />
       </a-button>
@@ -33,32 +39,32 @@
       <a-button type="text" title="删除事件">
         <font-awesome-icon icon="fa-solid fa-eraser" />
       </a-button>
-    </div>
+    </div> -->
   </div>
   <!-- <a-alert :message="`You selected date: ${selectedValue && selectedValue.format('YYYY-MM-DD')}`" />
   <a-calendar :value="date" @select="onSelect" @panelChange="onPanelChange" /> -->
 </template>
 <script setup name="Countdown">
-import { ref } from 'vue';
-import dayjs, { Dayjs } from 'dayjs';
-const deadline = Date.now() + 10 * 60 * 60 * 2 * 2;
+import { ref, inject, onMounted } from 'vue';
+import dayjs from 'dayjs';
+let banner = inject('banner');// 横幅配置
+const deadline = dayjs(banner.eventTime); // 事件时间
 let isFinished = ref(false); // 倒计时是否结束
-const date = ref(dayjs('2017-01-25'));
-const selectedValue = ref(dayjs('2017-01-25'));
+let nowTime = dayjs();// 当前时间
 
 // 倒计时结束回调事件
 function stopCountdown() {
   isFinished.value = true;
 }
 
-const onSelect = (value) => {
-  date.value = value;
-  selectedValue.value = value;
-  console.log(selectedValue.value);
-};
-const onPanelChange = (value) => {
-  date.value = value;
-};
+onMounted(() => {
+  nowTime = dayjs();
+  // 判断事件倒计时是否结束
+  if (nowTime.diff(deadline) > 0) {
+    stopCountdown();
+  }
+})
+
 </script>
 <style lang="scss" scoped>
 .countdown-panel {
@@ -115,6 +121,9 @@ const onPanelChange = (value) => {
       text-overflow: ellipsis;
       text-wrap: nowrap;
       white-space: nowrap;
+    }
+    .title:hover{
+      cursor: pointer;
     }
 
     .countdown-prefix {

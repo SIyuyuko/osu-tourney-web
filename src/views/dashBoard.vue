@@ -2,8 +2,8 @@
  * @Author: SIyuyuko
  * @Date: 2024-04-28 16:43:45
  * @LastEditors: SIyuyuko
- * @LastEditTime: 2024-05-21 13:59:28
- * @FilePath: /tourney-site/src/views/dashBoard.vue
+ * @LastEditTime: 2024-07-24 17:16:21
+ * @FilePath: /osu!tourney-site/tourney-site/src/views/dashBoard.vue
  * @Description: 项目主页面
 -->
 <template>
@@ -20,6 +20,9 @@
       </a-layout>
     </a-layout>
   </div>
+  <a-drawer v-model:open="showSetting" title="配置设置" :width="450">
+    <Setting></Setting>
+  </a-drawer>
 </template>
 <script setup name="Dashboard">
 import Header from '@/components/nav/header.vue';
@@ -27,7 +30,8 @@ import Sider from '@/components/nav/sider.vue';
 import Home from './home/index.vue';
 import Tournament from './tournament/index.vue';
 import Mappool from './mappool/index.vue';
-import { inject, ref, shallowRef, watch, onBeforeMount } from 'vue';
+import Setting from './setting.vue';
+import { inject, ref, shallowRef, watch, onBeforeMount, provide } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { login } from '@/api/data_api.js';
 const route = useRoute();
@@ -40,12 +44,18 @@ let menu = ref([
   { name: 'tournament', component: shallowRef(Tournament) },
   { name: 'mappool', component: shallowRef(Mappool) },
 ]);
+let showSetting = ref(false);
+provide('loadView', loadView);
 // 动态匹配加载页面组件
 function loadView(val) {
   for (let item of menu.value) {
     if (item.name === val) {
       current.value = item.component;
     }
+  }
+  if (val === 'setting') {
+    // current.value = null;
+    showSetting.value = true;
   }
 }
 // 用户登录
@@ -85,5 +95,9 @@ watch(
   min-height: 280px;
   overflow: auto;
   border-radius: 10px;
+}
+
+.ant-layout-content:has(.no-scroll) {
+  overflow: hidden;
 }
 </style>

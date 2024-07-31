@@ -2,12 +2,21 @@
  * @Author: SIyuyuko
  * @Date: 2024-05-07 11:07:54
  * @LastEditors: SIyuyuko
- * @LastEditTime: 2024-05-07 11:23:29
+ * @LastEditTime: 2024-05-23 10:22:02
  * @FilePath: /tourney-site/src/components/nav/menu.vue
  * @Description: 目录菜单组件
 -->
 <template>
-  <a-menu class="menu" v-model:selectedKeys="selectedKeys" theme="light" mode="inline" @click="selectMenu">
+  <a-menu
+    class="menu"
+    :selectable="true"
+    v-model:selectedKeys="selectedKeys"
+    theme="light"
+    mode="inline"
+    @click="selectMenu"
+    :forceSubMenuRender="true"
+    triggerSubMenuAction="click"
+  >
     <a-menu-item key="home">
       <span class="anticon"><font-awesome-icon icon="fa-solid fa-house-user" /></span>
       <span>主页</span>

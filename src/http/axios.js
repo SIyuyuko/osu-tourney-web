@@ -20,10 +20,12 @@ axios.interceptors.request.use(
       //   'token':'80c483d59ca86ad0393cf8a98416e2a1'              // token
     };
     // 判断是否存在token，如果存在的话，则每个http header都加上token
-    let data = JSON.parse(localStorage.getItem('userKey'));
-    let token = data.token;
-    if (!config.headers.hasOwnProperty.call('token') && token) {
-      config.headers.token = token;
+    if (localStorage.getItem('userKey')) {
+      let data = JSON.parse(localStorage.getItem('userKey'));
+      let token = data.token;
+      if (!config.headers.hasOwnProperty.call('token') && token) {
+        config.headers.token = token;
+      }
     }
     return config;
   },

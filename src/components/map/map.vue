@@ -2,31 +2,39 @@
  * @Author: SIyuyuko
  * @Date: 2024-05-07 22:17:45
  * @LastEditors: SIyuyuko
- * @LastEditTime: 2024-05-11 13:55:41
+ * @LastEditTime: 2024-07-24 09:46:58
  * @FilePath: /osu!tourney-site/tourney-site/src/components/map/map.vue
  * @Description: 谱面组件
 -->
 <template>
-  <a-card :data-theme="themeMode" class="map-panel" :class="item.isLast ? 'last' : ''">
-    <a-card-meta :style="{ 'background-image': `url(${imgApi + item.data.beatmapset_id + imgApiSuffix}) ` }">
+  <a-card :data-theme="themeMode" class="map-panel" :class="isCard ? '' : 'detail'" v-if="map && loaded" size="small">
+    <a-card-meta>
       <template #description>
+        <div class="cover">
+          <img :src="`${imgApi + item?.data?.beatmapset_id + imgApiSuffix}`" />
+        </div>
         <div class="content-mask">
           <!-- #region 谱面信息 -->
           <div class="content left">
-            <span>{{ item.data.beatmapset.title }}
-              <span v-if="item.data.beatmapset.title !== item.data.beatmapset.title_unicode"> {{
-                item.data.beatmapset.title_unicode }}</span>
+            <span class="map-title">{{ map?.data?.beatmapset?.title }}
+              <span v-if="map?.data?.beatmapset?.title !== map?.data?.beatmapset?.title_unicode"> {{
+                map?.data?.beatmapset?.title_unicode }}</span>
             </span>
-            <span>{{ item.data.beatmapset.artist }} // {{ item.data.beatmapset.creator }}</span>
-            <span>{{ item.data.version }} - b{{ item.data.id }}</span>
+            <span class="map-people">{{ map?.data?.beatmapset?.artist }} // {{ map?.data?.beatmapset?.creator }}</span>
+            <span class="map-id">{{ map?.data?.version }} - b{{ map?.data?.id }}</span>
+            <span class="map-detail" v-if="!isCard && map?.params">
+              <span>CS {{ map?.data?.cs }}</span>
+              <span>AR {{ map?.params?.approach_rate }}</span>
+              <span>OD {{ map?.params?.overall_difficulty }}</span>
+              <span>Combo {{ map?.params?.max_combo }}</span>
+            </span>
           </div>
           <div class="content right">
-            <div class="tag" :class="item.tag">
-              <span>{{ item.tag }}</span>
+            <div class="tag" :class="map?.mod">
+              <span>{{ map?.mod + map?.index }}</span>
             </div>
             <div class="star">
-              <span>{{ item.star.toString().split('.')[0] }}<span v-if="item.star.toString().split('.')[1]">{{ '.' +
-                  item.star.toString().split('.')[1] }}</span>*
+              <span><span>{{ map?.params?.star_rating }}</span>*
               </span>
             </div>
           </div>
@@ -36,28 +44,28 @@
     </a-card-meta>
     <!-- #region 快捷按钮组 -->
     <template #actions>
-      <div class="website-btn" title="查看官网谱面信息" @click="openBeatmapWebsite(item.data.id)">
-        <font-awesome-icon icon="fa-solid fa-link" ></font-awesome-icon>
+      <div class="website-btn" title="查看官网谱面信息" @click="openBeatmapWebsite(map?.data?.id)">
+        <font-awesome-icon icon="fa-solid fa-link"></font-awesome-icon>
       </div>
-      <div class="copy-btn" title="复制谱面ID" @click="copyBeatmapID(item)">
-        <font-awesome-icon icon="fa-solid fa-copy" v-show="!item.isCopied"></font-awesome-icon>
-        <font-awesome-icon icon="fa-solid fa-check" :class="item.isCopied ? 'copied' : ''"
-          v-if="item.isCopied"></font-awesome-icon>
+      <div class="copy-btn" title="复制谱面ID" @click="copyBeatmapID(map)">
+        <font-awesome-icon icon="fa-solid fa-copy" v-show="!map?.isCopied"></font-awesome-icon>
+        <font-awesome-icon icon="fa-solid fa-check" :class="map?.isCopied ? 'copied' : ''"
+          v-if="map?.isCopied"></font-awesome-icon>
       </div>
-      <div class="download-btn" title="下载该谱面" @click="downloadBeatmap(item.data.beatmapset_id)">
+      <div class="download-btn" title="下载该谱面" @click="downloadBeatmap(map?.data?.beatmapset_id)">
         <font-awesome-icon icon="fa-solid fa-download"></font-awesome-icon>
       </div>
       <div class="copy-btn" title="复制比赛指令">
         <a-dropdown placement="bottomRight">
           <div>
-            <font-awesome-icon icon="fa-solid fa-code" v-show="!item.getCommand" />
-            <font-awesome-icon icon="fa-solid fa-clipboard-check" :class="item.getCommand ? 'copied' : ''"
-              v-if="item.getCommand" />
+            <font-awesome-icon icon="fa-solid fa-code" v-show="!map?.getCommand" />
+            <font-awesome-icon icon="fa-solid fa-clipboard-check" :class="map?.getCommand ? 'copied' : ''"
+              v-if="map?.getCommand" />
           </div>
           <template #overlay>
             <a-menu class="operate-button-menu">
-              <a-menu-item @click="copyCommand(item, 'map')">指定比赛谱面</a-menu-item>
-              <a-menu-item @click="copyCommand(item, 'mod')">指定比赛模组</a-menu-item>
+              <a-menu-item @click="copyCommand(map, 'map')">指定比赛谱面</a-menu-item>
+              <a-menu-item @click="copyCommand(map, 'mod')">指定比赛模组</a-menu-item>
             </a-menu>
           </template>
         </a-dropdown>
@@ -65,21 +73,30 @@
     </template>
     <!-- #endregion -->
   </a-card>
+  <div class="loading-panel" :class="isCard ? 'small' : ''" v-else>
+    <a-spin></a-spin>
+  </div>
 </template>
 
 <script setup name="Map">
-import { ref, inject } from 'vue';
+import { ref, inject, onMounted, nextTick, watch } from 'vue';
 // import { getModDiffStar } from '@/utils/mappool';
+import { getBeatmapInfo, getBeatmapAttributes } from '@/api/data_api';
 let themeMode = inject('themeMode');
 let imgApi = ref('https://assets.ppy.sh/beatmaps/');
 let imgApiSuffix = ref('/covers/card.jpg');
 let beatmapApi = ref('http://osu.ppy.sh/b/');
 let beatmapdownloadApi = ref('https://dl.sayobot.cn/beatmaps/download/');
-defineProps({
+let props = defineProps({
   item: {
-    type: Object
-  }
+    type: Object,
+  },
+  isCard: {
+    type: Boolean,
+  },
 });
+let map = ref();
+let loaded = ref(false);
 // 打开谱面官网链接
 function openBeatmapWebsite(bid) {
   let url = beatmapApi.value + bid;
@@ -88,7 +105,7 @@ function openBeatmapWebsite(bid) {
 // 复制谱面ID
 function copyBeatmapID(item) {
   let input = document.createElement('input');
-  input.value = item.data.id;
+  input.value = item.data?.id;
   document.body.appendChild(input);
   input.select();
   document.execCommand('Copy');
@@ -106,19 +123,19 @@ function downloadBeatmap(sid) {
 // 复制比赛指令
 function copyCommand(item, type) {
   let input = document.createElement('input');
-  console.log(item);
+  // console.log(item);
   let mpPrefix = type === 'map' ? '!mp map' : '!mp mods';
-  let value = type === 'map' ? item.data.id : item.tag;
+  let value = type === 'map' ? item.data?.id : item.mod;
   if (type === 'mod') {
-    let freeModList = ["DT", "FM", "TB"];
-    let suffix = freeModList.includes(item.tag) ? "freemod" : "nf"
-    value = item.tag.toLowerCase() + " " + suffix;
-    if (freeModList.includes(item.tag) && item.tag !== "DT") {
+    let freeModList = ['DT', 'FM', 'TB'];
+    let suffix = freeModList.includes(item.mod) ? 'freemod' : 'nf';
+    value = item.mod.toLowerCase() + ' ' + suffix;
+    if (freeModList.includes(item.mod) && item.mod !== 'DT') {
       value = suffix;
     }
   }
   input.value = `${mpPrefix} ${value}`;
-  console.log(input.value);
+  // console.log(input.value);
   document.body.appendChild(input);
   input.select();
   document.execCommand('Copy');
@@ -128,7 +145,58 @@ function copyCommand(item, type) {
     item.getCommand = false;
   }, 1000);
 }
-
+function initBeatmap(item) {
+  getBeatmapInfo(item.id).then((res) => {
+    if (res.status === 200) {
+      nextTick(() => {
+        map.value = Object.assign(props.item, res.data);
+        // console.log(map);
+        getBeatmapParams(map.value);
+      });
+    } else {
+      setTimeout(() => {
+        initBeatmap(item);
+      }, 2000);
+    }
+  });
+}
+async function getBeatmapParams(map) {
+  let noModList = ['FM', 'TB', 'EX'];
+  let params = {
+    bid: map.id,
+    mod: noModList.includes(map.mod) ? 'NM' : map.mod,
+    mode: map.data.mode,
+  };
+  getBeatmapAttributes(params).then((res) => {
+    let data = res.data;
+    for (let i in data) {
+      if (data[i].toString().indexOf('.') !== -1) {
+        if (i === 'star_rating') {
+          data[i] = data[i].toFixed(2);
+        } else {
+          data[i] = data[i].toFixed(1);
+        }
+      }
+    }
+    map.params = data;
+    loaded.value = true;
+  });
+}
+watch(
+  () => {
+    props.item;
+  },
+  () => {
+    loaded.value = false;
+    initBeatmap(props.item);
+  },
+  {
+    immediate: true, deep: true
+  }
+);
+onMounted(() => {
+  initBeatmap(props.item);
+});
 </script>
 <style lang="scss" scoped>
 .map-panel {
@@ -139,9 +207,21 @@ function copyCommand(item, type) {
   width: 300px;
   overflow: hidden;
 
+  .cover {
+    filter: brightness(0.4) blur(0.4px);
+    -webkit-filter: brightness(0.4) blur(0.4px);
+    position: absolute;
+    width: 100%;
+    height: 100%;
+
+    img {
+      object-fit: cover;
+      width: 100%;
+      height: 100%;
+    }
+  }
+
   .content-mask {
-    backdrop-filter: brightness(0.4) blur(0.4px);
-    -webkit-backdrop-filter: brightness(0.4) blur(0.4px);
     display: flex;
     width: 100%;
     justify-content: space-between;
@@ -231,7 +311,92 @@ function copyCommand(item, type) {
       }
     }
   }
+}
 
+.map-panel.detail {
+  width: calc(50% - 10px);
+  // height: 100px;
+  position: relative;
+  color: #ffffff;
+
+  :deep(.ant-card-body) {
+    padding: 0;
+
+    div {
+      color: #ffffff;
+    }
+
+    .ant-card-meta-description {
+      overflow: hidden;
+      position: relative;
+    }
+  }
+
+  .content-mask .content.left {
+    padding: 10px;
+
+    .map-title {
+      font-size: 18px;
+
+      span {
+        font-size: 14px;
+      }
+    }
+
+    .map-people {
+      font-size: 12px;
+      top: -5px;
+      position: relative;
+    }
+
+    .map-id {
+      font-size: 12px;
+      top: -7px;
+      position: relative;
+    }
+
+    .map-detail {
+      display: flex;
+      column-gap: 50px;
+      margin-top: -7px;
+
+      &>span {
+        font-size: 14px;
+        color: #eaeaea;
+      }
+    }
+  }
+
+  .content-mask .content.right {
+    height: auto;
+
+    .tag {
+      font-size: 20px;
+      width: 64px;
+      clip-path: path('M0 0 Q6 2 6 8 Q6 24 24 24 L64 24 L64 0 Z');
+    }
+
+    .star span span {
+      font-size: 24px;
+    }
+  }
+}
+
+.loading-panel {
+  width: calc(50% - 10px);
+  height: 140px;
+  text-align: center;
+  display: flex;
+  background-color: rgb(234, 234, 234, 0.5);
+  border-radius: 10px;
+
+  div {
+    margin: auto;
+  }
+}
+
+.loading-panel.small {
+  height: 82px;
 }
 
 ul.operate-button-menu {

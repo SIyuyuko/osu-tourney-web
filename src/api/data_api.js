@@ -1,10 +1,9 @@
 import axios from '../http/axios.js';
 /** 登录获取授权链接 */
-export const getOauthUrl = (params) => {
+export const getOauthUrl = () => {
   return axios({
     method: 'get',
     url: '/api/public/getOauthUrl',
-    params,
   });
 };
 /** token登陆 */
@@ -14,11 +13,11 @@ export const login = (params) => {
     url: `/api/user/login?code=${params}`,
   });
 };
-// 获取谱面bg
-export const getBeatmapBg = (params) => {
+/** 创建图池 */
+export const addPool = () => {
   return axios({
-    method: 'get',
-    url: `/api/background/${params}`,
+    method: 'put',
+    url: '/api/map/createPool',
   });
 };
 // 生成比赛图池
@@ -53,4 +52,33 @@ export const getUserInfo = (params) => {
     url: `/info/json`,
     params,
   });
+};
+/**
+* @description 获取谱面信息
+* @param {Number} params 谱面ID
+* @return void
+*/
+export const getBeatmapInfo = params => {
+	return axios({
+		method: "get",
+		url: `/api/info/${params}`,
+	});
+};
+/**
+* @description 获取谱面附加信息
+* @param {Object} params 谱面ID
+* @return void
+*/
+export const getBeatmapAttributes = params => {
+	return axios({
+		method: "get",
+		url: `/attr/json?bid=${params.bid}&mods=${params.mod}&mode=${params.mode}`,
+	});
+};
+// 获取谱面bg
+export const getBeatmapBg = params => {
+	return axios({
+		method: "get",
+		url: `/api/background/${params}`,
+	});
 };
