@@ -49,8 +49,7 @@ export const getLogin = (params) => {
 export const getUserInfo = (params) => {
   return axios({
     method: 'get',
-    url: `/info/json`,
-    params,
+    url: `/info/json?uid=${params}`,
   });
 };
 /**
@@ -59,10 +58,10 @@ export const getUserInfo = (params) => {
 * @return void
 */
 export const getBeatmapInfo = params => {
-	return axios({
-		method: "get",
-		url: `/api/info/${params}`,
-	});
+  return axios({
+    method: "get",
+    url: `/api/info/${params}`,
+  });
 };
 /**
 * @description 获取谱面附加信息
@@ -70,15 +69,15 @@ export const getBeatmapInfo = params => {
 * @return void
 */
 export const getBeatmapAttributes = params => {
-	return axios({
-		method: "get",
-		url: `/attr/json?bid=${params.bid}&mods=${params.mod}&mode=${params.mode}`,
-	});
+  return axios({
+    method: "get",
+    url: `/attr/json?bid=${params.bid}&mods=${params.mod}&mode=${params.mode}`,
+  });
 };
 // 获取谱面bg
 export const getBeatmapBg = params => {
-	return axios({
-		method: "get",
-		url: `/api/background/${params}`,
-	});
+  return axios({
+    method: "get",
+    url: `/api/background/${params}`,
+  });
 };

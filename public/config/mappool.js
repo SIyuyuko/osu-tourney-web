@@ -1,5 +1,5 @@
 // 图池配置
-export default {
+window.mappool = {
   // 图池列表
   list: [
     {

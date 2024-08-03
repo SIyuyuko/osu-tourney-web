@@ -2,7 +2,7 @@
  * @Author: SIyuyuko
  * @Date: 2024-05-07 01:54:03
  * @LastEditors: SIyuyuko
- * @LastEditTime: 2024-07-24 15:11:05
+ * @LastEditTime: 2024-08-01 14:10:08
  * @FilePath: /osu!tourney-site/tourney-site/src/views/mappool/index.vue
  * @Description: 图池页面组件
 -->
@@ -23,7 +23,7 @@
     </div>
     <div class="view">
       <!-- <keep-alive> -->
-        <component :is="current" :data="curPage==='mappool'?poolData:null"></component>
+      <component :is="current" :data="curPage === 'mappool' ? poolData : null"></component>
       <!-- </keep-alive> -->
     </div>
   </div>
@@ -50,7 +50,7 @@ function changeCurPage(page, data) {
   for (let item of menu.value) {
     if (item.name === page) {
       current.value = item.component;
-      if (data&&page==='mappool') {
+      if (data && page === 'mappool') {
         poolTitle.value = data.title;
         poolData.value = data;
       }
@@ -73,9 +73,11 @@ function showSettingPage(visible) {
   overflow-x: hidden;
   overflow-y: auto;
   height: 100%;
+
   .nav {
     padding: 0 10px;
   }
+
   .view {
     overflow-x: hidden;
     overflow-y: auto;

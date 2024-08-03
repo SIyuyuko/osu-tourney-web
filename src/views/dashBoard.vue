@@ -2,7 +2,7 @@
  * @Author: SIyuyuko
  * @Date: 2024-04-28 16:43:45
  * @LastEditors: SIyuyuko
- * @LastEditTime: 2024-07-24 17:16:21
+ * @LastEditTime: 2024-08-02 17:55:15
  * @FilePath: /osu!tourney-site/tourney-site/src/views/dashBoard.vue
  * @Description: 项目主页面
 -->
@@ -31,6 +31,7 @@ import Home from './home/index.vue';
 import Tournament from './tournament/index.vue';
 import Mappool from './mappool/index.vue';
 import Setting from './setting.vue';
+import Command from './command/index.vue';
 import { inject, ref, shallowRef, watch, onBeforeMount, provide } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { login } from '@/api/data_api.js';
@@ -43,6 +44,7 @@ let menu = ref([
   { name: 'home', component: shallowRef(Home) },
   { name: 'tournament', component: shallowRef(Tournament) },
   { name: 'mappool', component: shallowRef(Mappool) },
+  { name: 'command', component: shallowRef(Command) },
 ]);
 let showSetting = ref(false);
 provide('loadView', loadView);

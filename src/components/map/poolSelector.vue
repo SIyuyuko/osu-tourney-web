@@ -2,7 +2,7 @@
  * @Author: SIyuyuko
  * @Date: 2024-05-07 22:20:39
  * @LastEditors: SIyuyuko
- * @LastEditTime: 2024-07-31 17:55:52
+ * @LastEditTime: 2024-08-02 14:59:58
  * @FilePath: /osu!tourney-site/tourney-site/src/components/map/poolSelector.vue
  * @Description: 图池选择器组件
 -->
@@ -37,9 +37,9 @@
 </template>
 
 <script setup name="PoolSelector">
-import { ref, onMounted, inject, nextTick } from 'vue';
+import { ref, onMounted, nextTick } from 'vue';
 import Map from './map.vue';
-const data = inject('mappool'); // 图池配置
+const data = window.mappool; // 图池配置
 const poolName = data.homeMappool;
 let poolData = ref();
 let status = ref({}); // 图池状态

@@ -2,7 +2,7 @@
  * @Author: SIyuyuko
  * @Date: 2024-05-07 22:13:19
  * @LastEditors: SIyuyuko
- * @LastEditTime: 2024-07-31 17:42:17
+ * @LastEditTime: 2024-08-01 16:52:16
  * @FilePath: /osu!tourney-site/tourney-site/src/components/tour/tournamentInfo.vue
  * @Description: 比赛概览组件
 -->
@@ -32,9 +32,9 @@
   </div>
 </template>
 <script setup name="TournamentInfo">
-import { inject, onMounted, ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { message } from 'ant-design-vue';
-const data = inject('tournament'); // 比赛配置
+const data = window.tournament; // 比赛配置
 const tournamentName = data.homeTournament;
 let tourData = ref();
 function openUrl(url) {

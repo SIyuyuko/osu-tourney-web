@@ -2,8 +2,8 @@
  * @Author: SIyuyuko
  * @Date: 2024-05-14 16:15:55
  * @LastEditors: SIyuyuko
- * @LastEditTime: 2024-07-19 15:46:28
- * @FilePath: /tourney-site/src/views/mappool/poolList.vue
+ * @LastEditTime: 2024-08-01 16:53:02
+ * @FilePath: /osu!tourney-site/tourney-site/src/views/mappool/poolList.vue
  * @Description: 图池列表组件
 -->
 <template>
@@ -19,8 +19,7 @@
 </template>
 <script setup name="poolList">
 import PoolCard from '../../components/map/poolCard.vue';
-import { inject } from 'vue';
-const data = inject('mappool');// 图池配置
+const data = window.mappool;// 图池配置
 const list = data.list;// 图池列表
 function createPool() {
   let pool = { title: '空白图池' };

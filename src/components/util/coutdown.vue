@@ -2,7 +2,7 @@
  * @Author: SIyuyuko
  * @Date: 2024-05-07 16:42:54
  * @LastEditors: SIyuyuko
- * @LastEditTime: 2024-07-29 16:44:59
+ * @LastEditTime: 2024-08-01 16:52:29
  * @FilePath: /osu!tourney-site/tourney-site/src/components/util/coutdown.vue
  * @Description: 倒计时组件
 -->
@@ -45,9 +45,9 @@
   <a-calendar :value="date" @select="onSelect" @panelChange="onPanelChange" /> -->
 </template>
 <script setup name="Countdown">
-import { ref, inject, onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
 import dayjs from 'dayjs';
-let banner = inject('banner');// 横幅配置
+let banner = window.banner;// 横幅配置
 const deadline = dayjs(banner.eventTime); // 事件时间
 let isFinished = ref(false); // 倒计时是否结束
 let nowTime = dayjs();// 当前时间
@@ -122,7 +122,8 @@ onMounted(() => {
       text-wrap: nowrap;
       white-space: nowrap;
     }
-    .title:hover{
+
+    .title:hover {
       cursor: pointer;
     }
 

@@ -1,5 +1,5 @@
 // 首页横幅配置
-export default {
+window.banner = {
   // 横幅类型 事件event 备忘录todo 图片image 日历calendar
   bannerType: 'event',
   // 事件名称

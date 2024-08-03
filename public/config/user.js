@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 // 用户信息配置
-export default {
+window.user = {
   // 用户名
   name: 'SIyuyuko',
   // 玩家uid

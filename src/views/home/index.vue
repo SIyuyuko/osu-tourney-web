@@ -2,7 +2,7 @@
  * @Author: SIyuyuko
  * @Date: 2024-05-07 00:27:32
  * @LastEditors: SIyuyuko
- * @LastEditTime: 2024-07-24 14:44:42
+ * @LastEditTime: 2024-08-01 16:52:40
  * @FilePath: /osu!tourney-site/tourney-site/src/views/home/index.vue
  * @Description: 主页页面组件
 -->
@@ -40,8 +40,8 @@ import Coutdown from '../../components/util/coutdown.vue';
 import TournamentInfo from '../../components/tour/tournamentInfo.vue';
 import PoolSelector from '../../components/map/poolSelector.vue';
 import dayjs from 'dayjs';
-import { ref, watch, onMounted, inject } from 'vue';
-let user = inject('user');// 用户配置
+import { ref, watch, onMounted } from 'vue';
+let user = window.user;// 用户配置
 const currentDate = dayjs(Date.now()).format('YYYY-MM-DD'); // 今天日期
 const duringTime = dayjs(currentDate).diff(user.activeDate, 'day'); // 活跃时长/时间间隔
 const currentTime = ref(dayjs(Date.now()).format('HH')); // 当前时间戳/小时
