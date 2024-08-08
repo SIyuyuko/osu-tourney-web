@@ -2,14 +2,14 @@
  * @Author: SIyuyuko
  * @Date: 2024-05-07 16:42:54
  * @LastEditors: SIyuyuko
- * @LastEditTime: 2024-08-01 16:52:29
+ * @LastEditTime: 2024-08-08 16:54:37
  * @FilePath: /osu!tourney-site/tourney-site/src/components/util/coutdown.vue
  * @Description: 倒计时组件
 -->
 <template>
   <div class="countdown-panel">
     <div class="countdown">
-      <a-statistic-countdown :value="deadline" format="D 天 H 时 m 分 s 秒" @finish="stopCountdown"
+      <a-statistic-countdown v-if="banner.eventTime && banner.event" :value="deadline" format="D 天 H 时 m 分 s 秒" @finish="stopCountdown"
         :class="isFinished ? 'finished' : ''">
         <template #title>
           <span class="title-prefix">Next Event:</span>
@@ -28,6 +28,7 @@
           <span>{{ banner.eventEndTips }}</span>
         </template>
       </a-statistic-countdown>
+      <a-empty v-else description="暂无事件" :image="Empty.PRESENTED_IMAGE_SIMPLE" style="width: 100%;"/>
     </div>
     <!-- <div class="operate-button-group">
       <a-button type="text" title="配置事件">
@@ -45,6 +46,7 @@
   <a-calendar :value="date" @select="onSelect" @panelChange="onPanelChange" /> -->
 </template>
 <script setup name="Countdown">
+import { Empty } from 'ant-design-vue';
 import { ref, onMounted } from 'vue';
 import dayjs from 'dayjs';
 let banner = window.banner;// 横幅配置

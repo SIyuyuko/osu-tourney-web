@@ -2,7 +2,7 @@
  * @Author: SIyuyuko
  * @Date: 2024-05-07 01:54:03
  * @LastEditors: SIyuyuko
- * @LastEditTime: 2024-08-01 14:10:08
+ * @LastEditTime: 2024-08-05 09:19:46
  * @FilePath: /osu!tourney-site/tourney-site/src/views/mappool/index.vue
  * @Description: 图池页面组件
 -->
@@ -58,12 +58,12 @@ function changeCurPage(page, data) {
   }
 }
 // 显示图池设置
-function showSettingPage(visible) {
-  showSetting.value = visible;
-  if (visible) {
-    changeCurPage('setting');
-  }
-}
+// function showSettingPage(visible) {
+//   showSetting.value = visible;
+//   if (visible) {
+//     changeCurPage('setting');
+//   }
+// }
 </script>
 <style lang="scss" scoped>
 .page {

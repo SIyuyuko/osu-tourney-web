@@ -2,7 +2,7 @@
  * @Author: SIyuyuko
  * @Date: 2024-05-07 00:27:32
  * @LastEditors: SIyuyuko
- * @LastEditTime: 2024-08-01 16:52:40
+ * @LastEditTime: 2024-08-08 16:41:10
  * @FilePath: /osu!tourney-site/tourney-site/src/views/home/index.vue
  * @Description: 主页页面组件
 -->
@@ -12,11 +12,11 @@
       <div class="welcome-panel">
         <div class="user-state">
           <div class="state-words">
-            <p>Welcome, {{ user.name }}!</p>
-            <p>今天距离你第一次成为 {{ user.character }} 已经过去了 {{ duringTime }} 天</p>
+            <p>Welcome, {{ userInfo ? userInfo.username : user.name }}!</p>
+            <p v-if="user.character">今天距离你第一次成为 {{ user.character }} 已经过去了 {{ duringTime }} 天</p>
           </div>
           <div class="avatar">
-            <a-avatar shape="square" :size="72" :src="user.avatar"></a-avatar>
+            <a-avatar shape="square" :size="72" :src="userInfo ? userInfo.avatar_url : user.avatar"></a-avatar>
           </div>
         </div>
         <p class="time-words">{{ dailyWords }}</p>
@@ -39,24 +39,26 @@
 import Coutdown from '../../components/util/coutdown.vue';
 import TournamentInfo from '../../components/tour/tournamentInfo.vue';
 import PoolSelector from '../../components/map/poolSelector.vue';
+import { getUserInfo } from '@/api/data_api';
 import dayjs from 'dayjs';
 import { ref, watch, onMounted } from 'vue';
 let user = window.user;// 用户配置
+let userInfo = ref();// 用户api信息
 const currentDate = dayjs(Date.now()).format('YYYY-MM-DD'); // 今天日期
 const duringTime = dayjs(currentDate).diff(user.activeDate, 'day'); // 活跃时长/时间间隔
 const currentTime = ref(dayjs(Date.now()).format('HH')); // 当前时间戳/小时
-let dailyWords = '';// 时间段提示语
+let dailyWords = ref('');// 时间段提示语
 watch(
   currentTime,
   (val) => {
     if (val >= 6 && val <= 12) {
-      dailyWords = user.dailyWords.morning;
+      dailyWords.value = user.dailyWords.morning;
     } else if (val >= 13 && val <= 18) {
-      dailyWords = user.dailyWords.afternoon;
+      dailyWords.value = user.dailyWords.afternoon;
     } else if (val >= 19 && val <= 24) {
-      dailyWords = user.dailyWords.evening;
+      dailyWords.value = user.dailyWords.evening;
     } else {
-      dailyWords = user.dailyWords.night;
+      dailyWords.value = user.dailyWords.night;
     }
   },
   {
@@ -66,7 +68,15 @@ watch(
 onMounted(() => {
   setInterval(() => {
     currentTime.value = dayjs(Date.now()).format('HH');
-  }, 1800000);
+  }, 900000);
+  // 配置uid时请求用户信息，否则以本地配置渲染
+  if (user.uid !== 0 && typeof user.uid === 'number') {
+    getUserInfo(user.uid).then((res) => {
+      if (res) {
+        userInfo.value = res.data;
+      }
+    })
+  }
 });
 </script>
 <style lang="scss" scoped>

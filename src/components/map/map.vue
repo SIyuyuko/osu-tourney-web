@@ -2,13 +2,13 @@
  * @Author: SIyuyuko
  * @Date: 2024-05-07 22:17:45
  * @LastEditors: SIyuyuko
- * @LastEditTime: 2024-07-24 09:46:58
+ * @LastEditTime: 2024-08-08 15:08:11
  * @FilePath: /osu!tourney-site/tourney-site/src/components/map/map.vue
  * @Description: 谱面组件
 -->
 <template>
-  <a-card :data-theme="themeMode" class="map-panel" :class="isCard ? '' : 'detail'" v-if="map && loaded" size="small">
-    <a-card-meta>
+  <a-card :data-theme="themeMode" class="map-panel" :class="isCard ? '' : 'detail'" v-if="map || loaded" size="small">
+    <a-card-meta v-if="!isReferee">
       <template #description>
         <div class="cover">
           <img :src="`${imgApi + item?.data?.beatmapset_id + imgApiSuffix}`" />
@@ -42,6 +42,14 @@
         </div>
       </template>
     </a-card-meta>
+    <a-card-meta class="referee" v-else>
+      <template #description>
+        <div class="info">
+          <span>{{ props.item?.id }}</span>
+          <span class="tag" :class="props.item?.mod">{{ props.item?.mod + props.item?.index }}</span>
+        </div>
+      </template>
+    </a-card-meta>
     <!-- #region 快捷按钮组 -->
     <template #actions>
       <div class="website-btn" title="查看官网谱面信息" @click="openBeatmapWebsite(map?.data?.id)">
@@ -52,8 +60,12 @@
         <font-awesome-icon icon="fa-solid fa-check" :class="map?.isCopied ? 'copied' : ''"
           v-if="map?.isCopied"></font-awesome-icon>
       </div>
-      <div class="download-btn" title="下载该谱面" @click="downloadBeatmap(map?.data?.beatmapset_id)">
+      <div v-if="!isReferee" class="download-btn" title="下载该谱面" @click="downloadBeatmap(map?.data?.beatmapset_id)">
         <font-awesome-icon icon="fa-solid fa-download"></font-awesome-icon>
+      </div>
+      <div v-else class="check-btn" :title="!map.checkStatus ? '将该谱面标记为已使用' : '移除标记'" @click="toggleMapStatus(map)">
+        <font-awesome-icon v-if="!map.checkStatus" icon="fa-solid fa-circle-check"></font-awesome-icon>
+        <font-awesome-icon v-if="map.checkStatus" icon="fa-solid fa-circle-minus" />
       </div>
       <div class="copy-btn" title="复制比赛指令">
         <a-dropdown placement="bottomRight">
@@ -94,7 +106,11 @@ let props = defineProps({
   isCard: {
     type: Boolean,
   },
+  isReferee: {
+    type: Boolean,
+  }
 });
+const emit = defineEmits(['update'])
 let map = ref();
 let loaded = ref(false);
 // 打开谱面官网链接
@@ -120,17 +136,24 @@ function downloadBeatmap(sid) {
   let url = beatmapdownloadApi.value + sid;
   window.open(url, '_self');
 }
+function toggleMapStatus(map) {
+  map.checkStatus = !map.checkStatus;
+  emit('update', map)
+}
 // 复制比赛指令
 function copyCommand(item, type) {
   let input = document.createElement('input');
   // console.log(item);
   let mpPrefix = type === 'map' ? '!mp map' : '!mp mods';
-  let value = type === 'map' ? item.data?.id : item.mod;
+  let value = type === 'map' ? item.data?.id ?? item?.id : item.mod;
   if (type === 'mod') {
     let freeModList = ['DT', 'FM', 'TB'];
     let suffix = freeModList.includes(item.mod) ? 'freemod' : 'nf';
     value = item.mod.toLowerCase() + ' ' + suffix;
     if (freeModList.includes(item.mod) && item.mod !== 'DT') {
+      value = suffix;
+    }
+    if (item.mod === "NM") {
       value = suffix;
     }
   }
@@ -187,15 +210,24 @@ watch(
     props.item;
   },
   () => {
-    loaded.value = false;
-    initBeatmap(props.item);
+    if (!props.isReferee) {
+      loaded.value = false;
+      initBeatmap(props.item);
+    } else {
+      loaded.value = true;
+      map.value = props.item;
+    }
   },
   {
     immediate: true, deep: true
   }
 );
 onMounted(() => {
-  initBeatmap(props.item);
+  if (!props.isReferee) {
+    initBeatmap(props.item);
+  } else {
+    loaded.value = true;
+  }
 });
 </script>
 <style lang="scss" scoped>
@@ -270,30 +302,6 @@ onMounted(() => {
         span {
           padding: 0 2px 0 10px;
         }
-      }
-
-      .tag.HD {
-        background-color: #f9b552;
-      }
-
-      .tag.NM {
-        background-color: #21ad38;
-      }
-
-      .tag.DT {
-        background-color: #009fe8;
-      }
-
-      .tag.FM {
-        background-color: #9922ee;
-      }
-
-      .tag.TB {
-        background-color: #000000;
-      }
-
-      .tag.EX {
-        background-color: #ff9700;
       }
 
       .star {
@@ -378,6 +386,55 @@ onMounted(() => {
 
     .star span span {
       font-size: 24px;
+    }
+  }
+}
+
+.tag.HD {
+  background-color: #f9b552;
+}
+
+.tag.NM {
+  background-color: #21ad38;
+}
+
+.tag.DT {
+  background-color: #009fe8;
+}
+
+.tag.FM {
+  background-color: #9922ee;
+}
+
+.tag.TB {
+  background-color: #000000;
+}
+
+.tag.EX {
+  background-color: #ff9700;
+}
+
+.referee {
+  :deep(.ant-card-meta-description) {
+    display: inline-flex;
+    align-items: center;
+    margin: auto !important;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .info {
+    .tag {
+      color: #ffffff;
+      border-radius: 2px;
+      width: 40px;
+      height: 20px;
+      display: inline-flex;
+      text-align: center;
+      margin: auto;
+      justify-content: center;
+      align-items: center;
+      margin: 0 0 0 10px;
     }
   }
 }

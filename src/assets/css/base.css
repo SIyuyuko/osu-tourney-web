@@ -2,7 +2,7 @@
 
 *,
 *::before,
-*::after {
+*::after ,.ant-input,.ant-typography>*{
   box-sizing: border-box;
   margin: 0;
   font-weight: 500;

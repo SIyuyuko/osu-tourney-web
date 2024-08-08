@@ -2,7 +2,7 @@
  * @Author: SIyuyuko
  * @Date: 2024-05-07 22:13:19
  * @LastEditors: SIyuyuko
- * @LastEditTime: 2024-08-01 16:52:16
+ * @LastEditTime: 2024-08-08 17:06:23
  * @FilePath: /osu!tourney-site/tourney-site/src/components/tour/tournamentInfo.vue
  * @Description: 比赛概览组件
 -->
@@ -30,10 +30,11 @@
       </template>
     </a-card>
   </div>
+  <a-empty v-else description="暂无进行中的比赛" :image="Empty.PRESENTED_IMAGE_SIMPLE" style="width: 100%;" />
 </template>
 <script setup name="TournamentInfo">
 import { onMounted, ref } from 'vue';
-import { message } from 'ant-design-vue';
+import { message, Empty } from 'ant-design-vue';
 const data = window.tournament; // 比赛配置
 const tournamentName = data.homeTournament;
 let tourData = ref();

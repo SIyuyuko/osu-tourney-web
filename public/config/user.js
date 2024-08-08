@@ -2,15 +2,15 @@
 // 用户信息配置
 window.user = {
   // 用户名
-  name: 'SIyuyuko',
+  name: 'Guest',
   // 玩家uid
-  uid: '9794030',
+  uid: 0,
   // 用户头像
   avatar: '/config/image/user/avatar.jpg',
   // 开始活动日期
-  activeDate: '2022-06-21',
+  activeDate: '',
   // 角色
-  character: 'Staff',
+  character: '',
   // 每日一句
   dailyWords: {
     morning: '一日之计在于晨',

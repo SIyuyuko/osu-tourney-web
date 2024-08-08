@@ -48,7 +48,7 @@ axios.interceptors.response.use(
       return Promise.reject(response.data);
       // if(response.message.in)
     } else {
-      message.error('bad network');
+      message.error('网络连接失败，请稍后重试');
     }
   }
 );

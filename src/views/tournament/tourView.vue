@@ -2,7 +2,7 @@
  * @Author: SIyuyuko
  * @Date: 2024-08-02 10:01:51
  * @LastEditors: SIyuyuko
- * @LastEditTime: 2024-08-02 17:44:19
+ * @LastEditTime: 2024-08-08 17:20:36
  * @FilePath: /osu!tourney-site/tourney-site/src/views/tournament/tourView.vue
  * @Description: 比赛详情页面组件
 -->
@@ -35,8 +35,7 @@
 					</a-avatar>
 					<span>{{ player?.username ? player?.username : "Loading..." }}</span>
 					<div class="operate-button-group">
-						<a-button size="small" type="primary"
-							@click="openUrl('https://osu.ppy.sh/users/' + player?.uid)">
+						<a-button size="small" type="primary" @click="openUrl('https://osu.ppy.sh/users/' + player?.uid)">
 							<font-awesome-icon icon="fa-solid fa-circle-info" />
 							玩家主页
 						</a-button>
@@ -55,10 +54,12 @@
 			</div>
 		</a-collapse-panel>
 	</a-collapse>
+	<a-empty v-else description="No Data" :image="Empty.PRESENTED_IMAGE_SIMPLE" style="width: 100%;" />
 </template>
 <script setup name="TourView">
+import { Empty } from 'ant-design-vue';
 import { CaretRightOutlined } from '@ant-design/icons-vue';
-import { defineProps, onMounted, ref, onUnmounted } from 'vue';
+import { onMounted, ref, onUnmounted } from 'vue';
 import { getUserInfo } from '@/api/data_api.js';
 const emit = defineEmits(['showDetail']);
 const prop = defineProps({
@@ -121,6 +122,12 @@ function initUser() {
 								uid: item.player[e],
 								username: res?.data?.username,
 								avatar: res?.data?.avatar_url,
+							};
+							item.player[e] = obj;
+						} else {
+							obj = {
+								uid: item.player[e],
+								username: ""
 							};
 							item.player[e] = obj;
 						}

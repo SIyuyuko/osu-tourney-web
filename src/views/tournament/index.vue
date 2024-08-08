@@ -2,18 +2,18 @@
  * @Author: SIyuyuko
  * @Date: 2024-05-07 00:28:34
  * @LastEditors: SIyuyuko
- * @LastEditTime: 2024-08-02 16:26:09
+ * @LastEditTime: 2024-08-08 17:32:17
  * @FilePath: /osu!tourney-site/tourney-site/src/views/tournament/index.vue
  * @Description: 比赛列表页面组件
 -->
 <template>
-	<a-list item-layout="vertical" size="small" :pagination="pagination" :data-source="listData" :loading="!visible"
-		:split="false" v-if="!showDetail">
+	<a-list item-layout="vertical" size="small" :data-source="listData" :loading="!visible" :split="false"
+		v-if="!showDetail">
 		<template #header>
 			<span>比赛列表</span>
 		</template>
 		<template #renderItem="{ item }">
-			<a-list-item key="item.title" v-if="visible">
+			<a-list-item key="item.title" v-if="visible && listData.length>0">
 				<template #actions>
 					<div class="status-bar" v-if="element?.width > 260">
 						<span v-for="{ icon, value } in item?.statusList" :key="icon">
@@ -44,22 +44,24 @@
 				<a :href="item.mainSheetUrl" target="_blank"
 					:style="item.mainSheetUrl === '' ? disableStyle : ''">主表格/网站</a>
 			</a-list-item>
+			<a-empty v-else description="暂无比赛" :image="Empty.PRESENTED_IMAGE_SIMPLE" style="width: 100%;" />
 		</template>
 	</a-list>
 	<TourView v-if="showDetail" :data="tourData" @showDetail="showDetail = false" />
 </template>
 <script setup name="Tournament">
+import { Empty } from 'ant-design-vue';
 import { onMounted, ref } from 'vue';
 import { useResizeObserver } from '@vueuse/core'
 import TourView from './tourView.vue'
 let tournament = window.tournament;
 const listData = tournament.list;
-const pagination = {
-	onChange: page => {
-		console.log(page);
-	},
-	pageSize: 3,
-};
+// const pagination = {
+// 	onChange: page => {
+// 		console.log(page);
+// 	},
+// 	pageSize: 3,
+// };
 let visible = ref(false);
 let showDetail = ref(false);
 const tourRef = ref(null);
@@ -87,6 +89,7 @@ function initStatusList() {
 						break;
 					case "players":
 						param.icon = "fa-solid fa-users";
+						param.value = `${item[e]}人`;
 						param.index = 1;
 						break;
 					case "time":
@@ -131,7 +134,8 @@ onMounted(() => {
 	span:not(:last-child) {
 		margin: 0 10px 0 0;
 	}
-	span:hover{
+
+	span:hover {
 		cursor: pointer;
 	}
 }

@@ -27,6 +27,7 @@ window.mappool = {
             { mod: 'FM', index: 3, id: 3871651 },
             { mod: 'TB', index: '', id: 4285919 },
           ],
+          // 是否默认显示
           isDefault: false,
         },
         {
@@ -49,36 +50,8 @@ window.mappool = {
             { mod: 'FM', index: 3, id: 2169428 },
             { mod: 'TB', index: '', id: 2140353 },
           ],
+          // 是否默认显示
           isDefault: true,
-        },
-      ],
-    },
-    {
-      // 图池名称
-      title: 'YHC S5',
-      // 子图池列表
-      children: [
-        {
-          // 图池名称
-          title: 'Round 1',
-          // 谱面 模组mod 序号index 谱面ID id
-          map: [
-            { mod: 'HD', index: 1, id: 3628770 },
-            { mod: 'HD', index: 2, id: 4465678 },
-            { mod: 'HD', index: 3, id: 4593330 },
-            { mod: 'HD', index: 4, id: 4473195 },
-            { mod: 'HD', index: 5, id: 4200548 },
-            { mod: 'HD', index: 6, id: 4528039 },
-            { mod: 'NM', index: 1, id: 3947249 },
-            { mod: 'NM', index: 2, id: 4535879 },
-            { mod: 'DT', index: 1, id: 4156885 },
-            { mod: 'DT', index: 2, id: 4586833 },
-            { mod: 'FM', index: 1, id: 4459927 },
-            { mod: 'FM', index: 2, id: 4327655 },
-            { mod: 'FM', index: 3, id: 4568443 },
-            { mod: 'TB', index: '', id: 3313173 },
-          ],
-          isDefault: false,
         },
       ],
     },
