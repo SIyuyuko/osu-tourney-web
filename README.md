@@ -19,7 +19,7 @@ osu!tourney web 是一个 osu! 比赛信息管理项目，通过个性化配置�
 
 - Node.js，版本高于 20.12.1
 
-#### 运行前
+#### 运行
 
 1. 下载并安装 [Node.js](https://nodejs.org/zh-cn/download/prebuilt-installer)。
 
@@ -49,7 +49,7 @@ osu!tourney web 是一个 osu! 比赛信息管理项目，通过个性化配置�
    ```
    - 项目成功启动后，在浏览器中输入 <http://localhost:5173/> 即可开始使用。
 
-#### 运行项目
+#### 开发
 
 - 克隆项目仓库到本地
   
@@ -103,11 +103,11 @@ osu! tourney web is a manage project for osu! tournaments by running in local wi
 
 If you are inexperienced in osu! tournament management, don't have time to create or obtain a handy referee sheets; or are not skilled enough in the use of tournament instructions, I hope that you will use this program and that it will help you in your work! uwu
 
-#### Runtime
+#### Environment
 
 - Node.js, version higher than 20.12.1
 
-#### Before Running
+#### Running the project
 
 1. Download and install [Node.js](https://nodejs.org/zh-cn/download/prebuilt-installer)
    
@@ -135,7 +135,7 @@ If you are inexperienced in osu! tournament management, don't have time to creat
    ```
    - When the program running successfully, input <http://localhost:5173> in your browser. then use it.
 
-#### Run The project
+#### Developing the project
 
 - clone project to local.
   
