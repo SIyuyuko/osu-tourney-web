@@ -14,6 +14,9 @@ dist-ssr
 coverage
 *.local
 public/self_config
+public/test_config
+public/*
+tourney-site.zip
 
 /cypress/videos/
 /cypress/screenshots/

@@ -2,7 +2,7 @@
  * @Author: SIyuyuko
  * @Date: 2024-05-07 22:17:45
  * @LastEditors: SIyuyuko
- * @LastEditTime: 2024-08-08 15:08:11
+ * @LastEditTime: 2024-08-09 16:20:18
  * @FilePath: /osu!tourney-site/tourney-site/src/components/map/map.vue
  * @Description: 谱面组件
 -->
@@ -65,7 +65,7 @@
       </div>
       <div v-else class="check-btn" :title="!map.checkStatus ? '将该谱面标记为已使用' : '移除标记'" @click="toggleMapStatus(map)">
         <font-awesome-icon v-if="!map.checkStatus" icon="fa-solid fa-circle-check"></font-awesome-icon>
-        <font-awesome-icon v-if="map.checkStatus" icon="fa-solid fa-circle-minus" />
+        <font-awesome-icon v-if="map.checkStatus" icon="fa-solid fa-circle-minus" style="color: #d9363e" />
       </div>
       <div class="copy-btn" title="复制比赛指令">
         <a-dropdown placement="bottomRight">
@@ -147,7 +147,7 @@ function copyCommand(item, type) {
   let mpPrefix = type === 'map' ? '!mp map' : '!mp mods';
   let value = type === 'map' ? item.data?.id ?? item?.id : item.mod;
   if (type === 'mod') {
-    let freeModList = ['DT', 'FM', 'TB'];
+    let freeModList = ['DT', 'FM', 'TB', 'EX'];
     let suffix = freeModList.includes(item.mod) ? 'freemod' : 'nf';
     value = item.mod.toLowerCase() + ' ' + suffix;
     if (freeModList.includes(item.mod) && item.mod !== 'DT') {
@@ -291,16 +291,17 @@ onMounted(() => {
 
     .content.right {
       justify-content: space-between;
-      width: 65px;
+      width: 64px;
 
       .tag {
         text-align: center;
         width: 60px;
         margin: 0 0 0 auto;
-        clip-path: path('M0 0 Q6 2 6 8 Q6 20 20 20 L60 20 L60 0 Z');
+        clip-path: path("M0 0 Q6 2 6 8 Q6 22 22 22 L60 22 L60 0 Z");
 
         span {
           padding: 0 2px 0 10px;
+          position: relative;
         }
       }
 
@@ -313,7 +314,7 @@ onMounted(() => {
           font-size: 24px;
 
           span {
-            font-size: 16px;
+            font-size: 22px;
           }
         }
       }
@@ -377,41 +378,26 @@ onMounted(() => {
 
   .content-mask .content.right {
     height: auto;
+    width: 110px;
 
     .tag {
-      font-size: 20px;
-      width: 64px;
-      clip-path: path('M0 0 Q6 2 6 8 Q6 24 24 24 L64 24 L64 0 Z');
+      font-size: 26px;
+      width: 110px;
+      clip-path: path("M0 0 Q16 6 16 18 Q16 36 36 36 L110 36 L110 0 Z");
+
+      span {
+        padding: 0 2px 0 20px;
+      }
     }
 
-    .star span span {
-      font-size: 24px;
+    .star span {
+      font-size: 30px;
+
+      span {
+        font-size: 28px;
+      }
     }
   }
-}
-
-.tag.HD {
-  background-color: #f9b552;
-}
-
-.tag.NM {
-  background-color: #21ad38;
-}
-
-.tag.DT {
-  background-color: #009fe8;
-}
-
-.tag.FM {
-  background-color: #9922ee;
-}
-
-.tag.TB {
-  background-color: #000000;
-}
-
-.tag.EX {
-  background-color: #ff9700;
 }
 
 .referee {

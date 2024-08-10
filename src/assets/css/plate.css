@@ -1,0 +1,23 @@
+.tag.HD {
+	background-color: #fdd835;
+}
+
+.tag.NM,.tag.EZ {
+	background-color: #4caf50;
+}
+
+.tag.DT,.tag.EX {
+	background-color: #42a5f5;
+}
+
+.tag.HR {
+	background-color: #d32f2f;
+}
+
+.tag.FM {
+	background-color: #3f51b5;
+}
+
+.tag.TB {
+	background-color: #000000;
+}
