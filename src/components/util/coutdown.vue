@@ -2,21 +2,25 @@
  * @Author: SIyuyuko
  * @Date: 2024-05-07 16:42:54
  * @LastEditors: SIyuyuko
- * @LastEditTime: 2024-08-08 16:54:37
- * @FilePath: /osu!tourney-site/tourney-site/src/components/util/coutdown.vue
+ * @LastEditTime: 2024-08-26 09:46:22
+ * @FilePath: /tourney-site/src/components/util/coutdown.vue
  * @Description: 倒计时组件
 -->
 <template>
   <div class="countdown-panel">
     <div class="countdown">
-      <a-statistic-countdown v-if="banner.eventTime && banner.event" :value="deadline" format="D 天 H 时 m 分 s 秒" @finish="stopCountdown"
-        :class="isFinished ? 'finished' : ''">
+      <a-statistic-countdown
+        v-if="banner.eventTime && banner.event"
+        :value="deadline"
+        :format="$i18n.locale === 'zh' ? 'D 天 H 时 m 分 s 秒' : `D day H hour m [min] s [second] ` + $t('banner.countdownSuffix')"
+        @finish="stopCountdown"
+        :class="isFinished ? 'finished' : ''"
+      >
         <template #title>
           <span class="title-prefix">Next Event:</span>
-          <a-tooltip placement="bottom">
+          <a-tooltip placement="bottomLeft">
             <template #title>
-              <span><font-awesome-icon icon="fa-regular fa-clock" /> {{ banner.eventTime
-                }}</span>
+              <span><font-awesome-icon icon="fa-regular fa-clock" /> {{ banner.eventTime }}</span>
             </template>
             <span class="title"><font-awesome-icon icon="fa-solid fa-calendar-days" /> {{ banner.event }}</span>
           </a-tooltip>
@@ -28,7 +32,7 @@
           <span>{{ banner.eventEndTips }}</span>
         </template>
       </a-statistic-countdown>
-      <a-empty v-else description="暂无事件" :image="Empty.PRESENTED_IMAGE_SIMPLE" style="width: 100%;"/>
+      <a-empty v-else description="暂无事件" :image="Empty.PRESENTED_IMAGE_SIMPLE" style="width: 100%" />
     </div>
     <!-- <div class="operate-button-group">
       <a-button type="text" title="配置事件">
@@ -49,10 +53,10 @@
 import { Empty } from 'ant-design-vue';
 import { ref, onMounted } from 'vue';
 import dayjs from 'dayjs';
-let banner = window.banner;// 横幅配置
+let banner = window.banner; // 横幅配置
 const deadline = dayjs(banner.eventTime); // 事件时间
 let isFinished = ref(false); // 倒计时是否结束
-let nowTime = dayjs();// 当前时间
+let nowTime = dayjs(); // 当前时间
 
 // 倒计时结束回调事件
 function stopCountdown() {
@@ -65,8 +69,7 @@ onMounted(() => {
   if (nowTime.diff(deadline) > 0) {
     stopCountdown();
   }
-})
-
+});
 </script>
 <style lang="scss" scoped>
 .countdown-panel {
@@ -95,8 +98,6 @@ onMounted(() => {
           display: none;
         }
       }
-
-
     }
 
     .ant-statistic.finished {

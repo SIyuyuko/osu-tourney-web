@@ -2,8 +2,8 @@
  * @Author: SIyuyuko
  * @Date: 2024-05-07 11:07:54
  * @LastEditors: SIyuyuko
- * @LastEditTime: 2024-08-02 17:53:51
- * @FilePath: /osu!tourney-site/tourney-site/src/components/nav/menu.vue
+ * @LastEditTime: 2024-08-23 16:57:09
+ * @FilePath: /tourney-site/src/components/nav/menu.vue
  * @Description: 目录菜单组件
 -->
 <template>
@@ -11,19 +11,19 @@
     @click="selectMenu" :forceSubMenuRender="true" triggerSubMenuAction="click">
     <a-menu-item key="home">
       <span class="anticon"><font-awesome-icon icon="fa-solid fa-house-user" /></span>
-      <span>主页</span>
+      <span>{{ $t('menu.home') }}</span>
     </a-menu-item>
     <a-menu-item key="tournament">
       <span class="anticon"><font-awesome-icon icon="fa-solid fa-chess" /></span>
-      <span>比赛</span>
+      <span>{{ $t('menu.tournament') }}</span>
     </a-menu-item>
     <a-menu-item key="mappool">
       <span class="anticon"><font-awesome-icon icon="fa-solid fa-map" /></span>
-      <span>图池</span>
+      <span>{{ $t('menu.mappool') }}</span>
     </a-menu-item>
     <a-menu-item key="command">
       <span class="anticon"><font-awesome-icon icon="fa-solid fa-terminal" /></span>
-      <span>指令</span>
+      <span>{{ $t('menu.command') }}</span>
     </a-menu-item>
   </a-menu>
   <div class="logo">

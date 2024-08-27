@@ -2,8 +2,8 @@
  * @Author: SIyuyuko
  * @Date: 2024-05-07 22:13:19
  * @LastEditors: SIyuyuko
- * @LastEditTime: 2024-08-08 17:06:23
- * @FilePath: /osu!tourney-site/tourney-site/src/components/tour/tournamentInfo.vue
+ * @LastEditTime: 2024-08-27 09:03:22
+ * @FilePath: /tourney-site/src/components/tour/tournamentInfo.vue
  * @Description: 比赛概览组件
 -->
 <template>
@@ -18,23 +18,24 @@
             <template #title>
               <span>{{ tourData.fullTitle ? tourData.fullTitle : tourData.title }}</span>
             </template>
-            <a-descriptions-item label="比赛时间">{{ tourData.time }}</a-descriptions-item>
-            <a-descriptions-item label="比赛模式">{{ tourData.mode }}</a-descriptions-item>
-            <a-descriptions-item label="比赛形式">{{ tourData.type }}</a-descriptions-item>
+            <a-descriptions-item :label="$t('tournament.time')">{{ tourData.time }}</a-descriptions-item>
+            <a-descriptions-item :label="$t('tournament.mode')">{{ tourData.mode }}</a-descriptions-item>
+            <a-descriptions-item :label="$t('tournament.type')">{{ tourData.type }}</a-descriptions-item>
           </a-descriptions>
         </template>
       </a-card-meta>
       <template #actions>
-        <font-awesome-icon icon="fa-solid fa-table" title="比赛主表格" @click="openUrl(tourData.mainSheetUrl)" />
+        <font-awesome-icon icon="fa-solid fa-table" :title="$t('tournament.mainSheet')" @click="openUrl(tourData.mainSheetUrl)" />
         <!-- <font-awesome-icon icon="fa-solid fa-ellipsis" title="详细信息" /> -->
       </template>
     </a-card>
   </div>
-  <a-empty v-else description="暂无进行中的比赛" :image="Empty.PRESENTED_IMAGE_SIMPLE" style="width: 100%;" />
+  <a-empty v-else :description="$t('tournament.emptyActive')" :image="Empty.PRESENTED_IMAGE_SIMPLE" style="width: 100%;" />
 </template>
 <script setup name="TournamentInfo">
 import { onMounted, ref } from 'vue';
 import { message, Empty } from 'ant-design-vue';
+import i18n from '@/language';
 const data = window.tournament; // 比赛配置
 const tournamentName = data.homeTournament;
 let tourData = ref();
@@ -42,7 +43,7 @@ function openUrl(url) {
   if (url !== "" && url) {
     window.open(url, "_blank");
   } else {
-    message.warning("请先配置网址链接");
+    message.warning(i18n.global.t('tournament.setUrlWarning'));
   }
 }
 onMounted(() => {

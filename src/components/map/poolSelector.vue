@@ -2,8 +2,8 @@
  * @Author: SIyuyuko
  * @Date: 2024-05-07 22:20:39
  * @LastEditors: SIyuyuko
- * @LastEditTime: 2024-08-08 17:06:32
- * @FilePath: /osu!tourney-site/tourney-site/src/components/map/poolSelector.vue
+ * @LastEditTime: 2024-08-26 14:42:20
+ * @FilePath: /tourney-site/src/components/map/poolSelector.vue
  * @Description: 图池选择器组件
 -->
 <template>
@@ -12,14 +12,14 @@
       <span>{{ poolData?.title + " " + mappool?.title }} Mappool</span>
     </template>
     <template #extra>
-      <div class="reset-btn" v-if="isReferee" title="重置标记状态" @click="resetMapStatus()">
+      <div class="reset-btn" v-if="isReferee" :title="$t('mappool.reset')" @click="resetMapStatus()">
         <font-awesome-icon icon="fa-solid fa-arrows-rotate" />
       </div>
       <div class="star-btn">
         <font-awesome-icon v-show="mappool?.isDefault" icon="fa-solid fa-star" />
         <font-awesome-icon v-show="!mappool?.isDefault" icon="fa-regular fa-star" />
       </div>
-      <div class="copy-btn" title="切换图池轮次">
+      <div class="copy-btn" :title="$t('mappool.switch')">
         <a-dropdown placement="bottomRight">
           <div>
             <font-awesome-icon icon="fa-solid fa-angle-down" />
@@ -38,7 +38,7 @@
         @update="updateMap"></Map>
     </div>
   </a-card>
-  <a-empty v-else description="暂无置顶图池" :image="Empty.PRESENTED_IMAGE_SIMPLE" style="width: 100%;"/>
+  <a-empty v-else :description="$t('mappool.emptyActive')" :image="Empty.PRESENTED_IMAGE_SIMPLE" style="width: 100%;"/>
 </template>
 
 <script setup name="PoolSelector">

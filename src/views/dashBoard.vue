@@ -2,8 +2,8 @@
  * @Author: SIyuyuko
  * @Date: 2024-04-28 16:43:45
  * @LastEditors: SIyuyuko
- * @LastEditTime: 2024-08-02 17:55:15
- * @FilePath: /osu!tourney-site/tourney-site/src/views/dashBoard.vue
+ * @LastEditTime: 2024-08-27 12:31:00
+ * @FilePath: /tourney-site/src/views/dashBoard.vue
  * @Description: 项目主页面
 -->
 <template>
@@ -20,7 +20,7 @@
       </a-layout>
     </a-layout>
   </div>
-  <a-drawer v-model:open="showSetting" title="配置设置" :width="450">
+  <a-drawer v-model:open="showSetting" :title="$t('setting.title')" :width="450">
     <Setting></Setting>
   </a-drawer>
 </template>
@@ -34,6 +34,7 @@ import Setting from './setting.vue';
 import Command from './command/index.vue';
 import { inject, ref, shallowRef, watch, onBeforeMount, provide } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
+import i18n from '@/language';
 import { login } from '@/api/data_api.js';
 const route = useRoute();
 const router = useRouter();
@@ -72,6 +73,7 @@ function log(token) {
   });
 }
 onBeforeMount(() => {
+  i18n.global.locale = window.user.language;
   loadView(selectMenu.value);
 });
 watch(selectMenu, (val) => {

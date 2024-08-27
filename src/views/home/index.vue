@@ -2,8 +2,8 @@
  * @Author: SIyuyuko
  * @Date: 2024-05-07 00:27:32
  * @LastEditors: SIyuyuko
- * @LastEditTime: 2024-08-08 16:41:10
- * @FilePath: /osu!tourney-site/tourney-site/src/views/home/index.vue
+ * @LastEditTime: 2024-08-26 09:58:00
+ * @FilePath: /tourney-site/src/views/home/index.vue
  * @Description: 主页页面组件
 -->
 <template>
@@ -13,7 +13,7 @@
         <div class="user-state">
           <div class="state-words">
             <p>Welcome, {{ userInfo ? userInfo.username : user.name }}!</p>
-            <p v-if="user.character">今天距离你第一次成为 {{ user.character }} 已经过去了 {{ duringTime }} 天</p>
+            <p v-if="user.character">{{ $t('home.rulePrefix') }} {{ user.character }} {{ $t('home.ruleMid') }} {{ duringTime }} {{ $t('home.ruleSuffix') }}</p>
           </div>
           <div class="avatar">
             <a-avatar shape="square" :size="72" :src="userInfo ? userInfo.avatar_url : user.avatar"></a-avatar>
@@ -27,7 +27,7 @@
     </div>
     <a-divider></a-divider>
     <div class="tour-view">
-      <header>当前比赛</header>
+      <header>{{ $t('home.tourTitle') }}</header>
       <div class="tournament-panel">
         <TournamentInfo />
         <PoolSelector />
@@ -42,12 +42,12 @@ import PoolSelector from '../../components/map/poolSelector.vue';
 import { getUserInfo } from '@/api/data_api';
 import dayjs from 'dayjs';
 import { ref, watch, onMounted } from 'vue';
-let user = window.user;// 用户配置
-let userInfo = ref();// 用户api信息
+let user = window.user; // 用户配置
+let userInfo = ref(); // 用户api信息
 const currentDate = dayjs(Date.now()).format('YYYY-MM-DD'); // 今天日期
 const duringTime = dayjs(currentDate).diff(user.activeDate, 'day'); // 活跃时长/时间间隔
 const currentTime = ref(dayjs(Date.now()).format('HH')); // 当前时间戳/小时
-let dailyWords = ref('');// 时间段提示语
+let dailyWords = ref(''); // 时间段提示语
 watch(
   currentTime,
   (val) => {
@@ -75,7 +75,7 @@ onMounted(() => {
       if (res) {
         userInfo.value = res.data;
       }
-    })
+    });
   }
 });
 </script>

@@ -2,8 +2,8 @@
  * @Author: SIyuyuko
  * @Date: 2024-05-07 22:17:45
  * @LastEditors: SIyuyuko
- * @LastEditTime: 2024-08-09 16:20:18
- * @FilePath: /osu!tourney-site/tourney-site/src/components/map/map.vue
+ * @LastEditTime: 2024-08-26 14:37:07
+ * @FilePath: /tourney-site/src/components/map/map.vue
  * @Description: 谱面组件
 -->
 <template>
@@ -16,9 +16,9 @@
         <div class="content-mask">
           <!-- #region 谱面信息 -->
           <div class="content left">
-            <span class="map-title">{{ map?.data?.beatmapset?.title }}
-              <span v-if="map?.data?.beatmapset?.title !== map?.data?.beatmapset?.title_unicode"> {{
-                map?.data?.beatmapset?.title_unicode }}</span>
+            <span class="map-title"
+              >{{ map?.data?.beatmapset?.title }}
+              <span v-if="map?.data?.beatmapset?.title !== map?.data?.beatmapset?.title_unicode"> {{ map?.data?.beatmapset?.title_unicode }}</span>
             </span>
             <span class="map-people">{{ map?.data?.beatmapset?.artist }} // {{ map?.data?.beatmapset?.creator }}</span>
             <span class="map-id">{{ map?.data?.version }} - b{{ map?.data?.id }}</span>
@@ -34,7 +34,9 @@
               <span>{{ map?.mod + map?.index }}</span>
             </div>
             <div class="star">
-              <span><span>{{ map?.params?.star_rating }}</span>*
+              <span
+                ><span>{{ map?.params?.star_rating }}</span
+                >*
               </span>
             </div>
           </div>
@@ -52,35 +54,27 @@
     </a-card-meta>
     <!-- #region 快捷按钮组 -->
     <template #actions>
-      <div class="website-btn" title="查看官网谱面信息" @click="openBeatmapWebsite(map?.data?.id)">
+      <div class="website-btn" :title="$t('mappool.seeMapInfo')" @click="openBeatmapWebsite(map?.data?.id)">
         <font-awesome-icon icon="fa-solid fa-link"></font-awesome-icon>
       </div>
-      <div class="copy-btn" title="复制谱面ID" @click="copyBeatmapID(map)">
+      <div class="copy-btn" :title="$t('mappool.getMapID')" @click="copyBeatmapID(map)">
         <font-awesome-icon icon="fa-solid fa-copy" v-show="!map?.isCopied"></font-awesome-icon>
-        <font-awesome-icon icon="fa-solid fa-check" :class="map?.isCopied ? 'copied' : ''"
-          v-if="map?.isCopied"></font-awesome-icon>
+        <font-awesome-icon icon="fa-solid fa-check" :class="map?.isCopied ? 'copied' : ''" v-if="map?.isCopied"></font-awesome-icon>
       </div>
-      <div v-if="!isReferee" class="download-btn" title="下载该谱面" @click="downloadBeatmap(map?.data?.beatmapset_id)">
+      <div v-if="!isReferee" class="download-btn" :title="$t('mappool.downloadMap')" @click="downloadBeatmap(map?.data?.beatmapset_id)">
         <font-awesome-icon icon="fa-solid fa-download"></font-awesome-icon>
       </div>
-      <div v-else class="check-btn" :title="!map.checkStatus ? '将该谱面标记为已使用' : '移除标记'" @click="toggleMapStatus(map)">
+      <div v-else class="check-btn" :title="!map.checkStatus ? $t('mappool.markMap') : $t('mappool.removeMark')" @click="toggleMapStatus(map)">
         <font-awesome-icon v-if="!map.checkStatus" icon="fa-solid fa-circle-check"></font-awesome-icon>
         <font-awesome-icon v-if="map.checkStatus" icon="fa-solid fa-circle-minus" style="color: #d9363e" />
       </div>
-      <div class="copy-btn" title="复制比赛指令">
-        <a-dropdown placement="bottomRight">
-          <div>
-            <font-awesome-icon icon="fa-solid fa-code" v-show="!map?.getCommand" />
-            <font-awesome-icon icon="fa-solid fa-clipboard-check" :class="map?.getCommand ? 'copied' : ''"
-              v-if="map?.getCommand" />
-          </div>
-          <template #overlay>
-            <a-menu class="operate-button-menu">
-              <a-menu-item @click="copyCommand(map, 'map')">指定比赛谱面</a-menu-item>
-              <a-menu-item @click="copyCommand(map, 'mod')">指定比赛模组</a-menu-item>
-            </a-menu>
-          </template>
-        </a-dropdown>
+      <div class="copy-btn" :title="$t('mappool.getMapCommand')" @click="copyCommand(map, 'map')">
+        <font-awesome-icon icon="fa-solid fa-map" v-show="!map?.setMap" />
+        <font-awesome-icon icon="fa-solid fa-clipboard-check" :class="map?.setMap ? 'copied' : ''" v-if="map?.setMap" />
+      </div>
+      <div class="copy-btn" :title="$t('mappool.getModCommand')" @click="copyCommand(map, 'mod')">
+        <font-awesome-icon icon="fa-solid fa-code" v-show="!map?.getCommand" />
+        <font-awesome-icon icon="fa-solid fa-clipboard-check" :class="map?.getCommand ? 'copied' : ''" v-if="map?.getCommand" />
       </div>
     </template>
     <!-- #endregion -->
@@ -108,9 +102,9 @@ let props = defineProps({
   },
   isReferee: {
     type: Boolean,
-  }
+  },
 });
-const emit = defineEmits(['update'])
+const emit = defineEmits(['update']);
 let map = ref();
 let loaded = ref(false);
 // 打开谱面官网链接
@@ -138,7 +132,7 @@ function downloadBeatmap(sid) {
 }
 function toggleMapStatus(map) {
   map.checkStatus = !map.checkStatus;
-  emit('update', map)
+  emit('update', map);
 }
 // 复制比赛指令
 function copyCommand(item, type) {
@@ -153,7 +147,7 @@ function copyCommand(item, type) {
     if (freeModList.includes(item.mod) && item.mod !== 'DT') {
       value = suffix;
     }
-    if (item.mod === "NM") {
+    if (item.mod === 'NM') {
       value = suffix;
     }
   }
@@ -163,9 +157,10 @@ function copyCommand(item, type) {
   input.select();
   document.execCommand('Copy');
   input.remove();
-  item.getCommand = true;
+  let e = type === "map" ? 'setMap' : 'getCommand';
+  item[e] = true;
   setTimeout(() => {
-    item.getCommand = false;
+    item[e] = false;
   }, 1000);
 }
 function initBeatmap(item) {
@@ -219,7 +214,8 @@ watch(
     }
   },
   {
-    immediate: true, deep: true
+    immediate: true,
+    deep: true,
   }
 );
 onMounted(() => {
@@ -297,7 +293,7 @@ onMounted(() => {
         text-align: center;
         width: 60px;
         margin: 0 0 0 auto;
-        clip-path: path("M0 0 Q6 2 6 8 Q6 22 22 22 L60 22 L60 0 Z");
+        clip-path: path('M0 0 Q6 2 6 8 Q6 22 22 22 L60 22 L60 0 Z');
 
         span {
           padding: 0 2px 0 10px;
@@ -369,7 +365,7 @@ onMounted(() => {
       column-gap: 50px;
       margin-top: -7px;
 
-      &>span {
+      & > span {
         font-size: 14px;
         color: #eaeaea;
       }
@@ -383,7 +379,7 @@ onMounted(() => {
     .tag {
       font-size: 26px;
       width: 110px;
-      clip-path: path("M0 0 Q16 6 16 18 Q16 36 36 36 L110 36 L110 0 Z");
+      clip-path: path('M0 0 Q16 6 16 18 Q16 36 36 36 L110 36 L110 0 Z');
 
       span {
         padding: 0 2px 0 20px;

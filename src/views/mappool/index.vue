@@ -11,8 +11,8 @@
     <div class="nav">
       <a-breadcrumb>
         <a-breadcrumb-item @click="changeCurPage('list')">
-          <a v-if="curPage !== 'list'">图池列表</a>
-          <span v-else>图池列表</span>
+          <a v-if="curPage !== 'list'">{{ $t('mappool.list') }}</a>
+          <span v-else>{{ $t('mappool.list') }}</span>
         </a-breadcrumb-item>
         <a-breadcrumb-item v-if="curPage === 'mappool' || showSetting" @click="changeCurPage('mappool')">
           <a v-if="curPage === 'setting'">{{ poolTitle }}</a>

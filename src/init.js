@@ -2,8 +2,8 @@
  * @Author: SIyuyuko
  * @Date: 2024-05-06 16:18:40
  * @LastEditors: SIyuyuko
- * @LastEditTime: 2024-08-01 14:55:56
- * @FilePath: /osu!tourney-site/tourney-site/src/init.js
+ * @LastEditTime: 2024-08-27 12:34:18
+ * @FilePath: /tourney-site/src/init.js
  * @Description: 全局初始化
  */
 import dayjs from 'dayjs';
@@ -16,7 +16,9 @@ import { ref, shallowRef } from 'vue';
 let themeMode = ref('light');
 let collapsed = ref(false);
 let current = shallowRef('home');
-
+setTimeout(() => {
+  themeMode.value = window.user.theme;
+}, 0);
 export default {
   install: function (App) {
     App.provide('themeMode', themeMode);
