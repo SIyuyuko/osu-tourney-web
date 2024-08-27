@@ -25,7 +25,6 @@ window.tournament = {
 			{
 				name: "Oh Bhou",
 				player: [13795588, 20971891, 32620473, 15525823]
-				// player: [13795588, 20971891, 32620473, 1992984]
 			},
 			{
 				name: "Pata-Mon 粉丝团",

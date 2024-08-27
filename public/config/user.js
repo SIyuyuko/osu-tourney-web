@@ -18,4 +18,6 @@ window.user = {
     evening: '夜深了，还在努力肝主表格吗',
     night: 'Good night 😴',
   },
+  language: 'zh',
+  theme: 'light',
 };
