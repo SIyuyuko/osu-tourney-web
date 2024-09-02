@@ -2,7 +2,7 @@
  * @Author: SIyuyuko
  * @Date: 2024-05-07 22:08:23
  * @LastEditors: SIyuyuko
- * @LastEditTime: 2024-09-02 14:52:17
+ * @LastEditTime: 2024-09-02 15:33:13
  * @FilePath: /tourney-site/src/components/util/cover.vue
  * @Description: 壁纸组件
 -->
@@ -46,8 +46,10 @@ let backdropStyle = ref({
 });
 // 切换壁纸回调
 function setCurrent(index) {
-  currentCover.value = banner.value.coverList[index];
-  backdropStyle.value.backgroundImage = `url(${currentCover.value})`;
+  if (banner.value.coverList?.length > 0) {
+    currentCover.value = banner.value.coverList[index];
+    backdropStyle.value.backgroundImage = `url(${currentCover.value})`;
+  }
 }
 onMounted(() => {
   setCurrent(0);

@@ -28,7 +28,7 @@
       </div>
       <a-divider class="divider" type="vertical"></a-divider>
       <a-divider class="divider-mobile"></a-divider>
-      <Countdown v-if="banner.bannerType === 'countdown'" />
+      <Countdown v-if="banner.bannerType === 'event'" />
       <Cover v-if="banner.bannerType === 'cover'" :info="userInfo" />
     </div>
     <a-divider></a-divider>
