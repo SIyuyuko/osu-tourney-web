@@ -10,9 +10,11 @@ export default {
     ruleMid: 'for',
     ruleSuffix: 'days ✨',
     tourTitle: 'Current Tournament',
+    viewProfile: 'click to view my osu! profile',
   },
   banner: {
     countdownSuffix: 'left',
+    emptyCover: 'no cover wallpaper',
   },
   tournament: {
     time: 'Timestamp',
@@ -74,7 +76,7 @@ export default {
     winSuffix: ' on winning, ggwp!',
   },
   setting: {
-    title:"Config Settings",
+    title: 'Config Settings',
     tip: 'Config files path is under ',
     open: 'Open',
     refresh: 'Refresh',

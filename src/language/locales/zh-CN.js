@@ -10,9 +10,11 @@ export default {
     ruleMid: '已经过去了',
     ruleSuffix: '天 ✨',
     tourTitle: '当前比赛',
+    viewProfile: '点击查看我的 osu! 主页',
   },
   banner: {
     countdownSuffix: '剩余',
+    emptyCover: '暂无壁纸',
   },
   tournament: {
     time: '比赛时间',
@@ -74,7 +76,7 @@ export default {
     winSuffix: '获得比赛胜利，ggwp!',
   },
   setting: {
-    title:"配置设置",
+    title: '配置设置',
     tip: '配置文件路径在',
     open: '打开',
     refresh: '刷新',
