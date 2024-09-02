@@ -2,7 +2,7 @@
  * @Author: SIyuyuko
  * @Date: 2024-05-07 00:27:32
  * @LastEditors: SIyuyuko
- * @LastEditTime: 2024-08-26 09:58:00
+ * @LastEditTime: 2024-09-02 14:41:13
  * @FilePath: /tourney-site/src/views/home/index.vue
  * @Description: 主页页面组件
 -->
@@ -16,14 +16,20 @@
             <p v-if="user.character">{{ $t('home.rulePrefix') }} {{ user.character }} {{ $t('home.ruleMid') }} {{ duringTime }} {{ $t('home.ruleSuffix') }}</p>
           </div>
           <div class="avatar">
-            <a-avatar shape="square" :size="72" :src="userInfo ? userInfo.avatar_url : user.avatar"></a-avatar>
+            <a-tooltip placement="bottom">
+              <template #title v-if="userInfo">
+                <span>{{ $t('home.viewProfile') }}</span>
+              </template>
+              <a-avatar class="avatar-img" shape="square" :size="72" :src="userInfo ? userInfo.avatar_url : user.avatar" @click="openUrl"></a-avatar>
+            </a-tooltip>
           </div>
         </div>
         <p class="time-words">{{ dailyWords }}</p>
       </div>
       <a-divider class="divider" type="vertical"></a-divider>
       <a-divider class="divider-mobile"></a-divider>
-      <Coutdown />
+      <Countdown v-if="banner.bannerType === 'countdown'" />
+      <Cover v-if="banner.bannerType === 'cover'" :info="userInfo" />
     </div>
     <a-divider></a-divider>
     <div class="tour-view">
@@ -36,7 +42,8 @@
   </div>
 </template>
 <script setup name="Home">
-import Coutdown from '../../components/util/coutdown.vue';
+import Countdown from '../../components/util/countdown.vue';
+import Cover from '../../components/util/cover.vue';
 import TournamentInfo from '../../components/tour/tournamentInfo.vue';
 import PoolSelector from '../../components/map/poolSelector.vue';
 import { getUserInfo } from '@/api/data_api';
@@ -44,10 +51,12 @@ import dayjs from 'dayjs';
 import { ref, watch, onMounted } from 'vue';
 let user = window.user; // 用户配置
 let userInfo = ref(); // 用户api信息
+let infoUrlPrefix = 'https://osu.ppy.sh/users/'; // osu!个人主页网址前缀
 const currentDate = dayjs(Date.now()).format('YYYY-MM-DD'); // 今天日期
 const duringTime = dayjs(currentDate).diff(user.activeDate, 'day'); // 活跃时长/时间间隔
 const currentTime = ref(dayjs(Date.now()).format('HH')); // 当前时间戳/小时
 let dailyWords = ref(''); // 时间段提示语
+let banner = window.banner;
 watch(
   currentTime,
   (val) => {
@@ -65,6 +74,10 @@ watch(
     immediate: true,
   }
 );
+// 打开osu主页链接
+function openUrl() {
+  window.open(infoUrlPrefix + user.uid, '_blank');
+}
 onMounted(() => {
   setInterval(() => {
     currentTime.value = dayjs(Date.now()).format('HH');
@@ -111,6 +124,9 @@ onMounted(() => {
           margin: 0 auto;
           align-items: center;
           display: flex;
+          .avatar-img:hover {
+            cursor: pointer;
+          }
         }
       }
     }
