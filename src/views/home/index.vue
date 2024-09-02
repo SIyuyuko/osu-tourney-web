@@ -2,7 +2,7 @@
  * @Author: SIyuyuko
  * @Date: 2024-05-07 00:27:32
  * @LastEditors: SIyuyuko
- * @LastEditTime: 2024-09-02 14:41:13
+ * @LastEditTime: 2024-09-02 15:46:10
  * @FilePath: /tourney-site/src/views/home/index.vue
  * @Description: 主页页面组件
 -->
@@ -76,7 +76,9 @@ watch(
 );
 // 打开osu主页链接
 function openUrl() {
-  window.open(infoUrlPrefix + user.uid, '_blank');
+  if (userInfo.value) {
+    window.open(infoUrlPrefix + user.uid, '_blank');
+  }
 }
 onMounted(() => {
   setInterval(() => {
