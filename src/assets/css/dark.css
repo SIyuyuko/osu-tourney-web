@@ -8,4 +8,8 @@
 	.logo {
 		border-inline-end: 1px solid rgba(253, 253, 253, 0.12);
 	}
+
+	* {
+		scrollbar-color: rgba(255, 255, 255, 0.1) #141414;
+	}
 }

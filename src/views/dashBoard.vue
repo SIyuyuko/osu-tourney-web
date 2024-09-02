@@ -2,7 +2,7 @@
  * @Author: SIyuyuko
  * @Date: 2024-04-28 16:43:45
  * @LastEditors: SIyuyuko
- * @LastEditTime: 2024-08-27 12:31:00
+ * @LastEditTime: 2024-08-28 10:34:03
  * @FilePath: /tourney-site/src/views/dashBoard.vue
  * @Description: 项目主页面
 -->
@@ -73,7 +73,7 @@ function log(token) {
   });
 }
 onBeforeMount(() => {
-  i18n.global.locale = window.user.language;
+  i18n.global.locale = window.user.language ?? 'zh';
   loadView(selectMenu.value);
 });
 watch(selectMenu, (val) => {

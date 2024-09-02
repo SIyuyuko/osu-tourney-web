@@ -2,7 +2,7 @@
  * @Author: SIyuyuko
  * @Date: 2024-08-02 10:01:51
  * @LastEditors: SIyuyuko
- * @LastEditTime: 2024-08-26 11:54:10
+ * @LastEditTime: 2024-09-02 14:12:38
  * @FilePath: /tourney-site/src/views/tournament/tourView.vue
  * @Description: 比赛详情页面组件
 -->
@@ -62,7 +62,7 @@ import { CaretRightOutlined } from '@ant-design/icons-vue';
 import { onMounted, ref, onUnmounted } from 'vue';
 import { getUserInfo } from '@/api/data_api.js';
 const emit = defineEmits(['showDetail']);
-const prop = defineProps({
+const props = defineProps({
   data: {
     type: Object,
   },
@@ -84,7 +84,7 @@ function openUrl(url) {
 function copyCommand(item) {
   let input = document.createElement('input');
   let mpPrefix = '!mp invite';
-  input.value = item?.username !== '' ? `${mpPrefix} ${item?.username}` : `${mpPrefix} #${item?.uid}`;// 网络请求差时邀请指令将使用#+uid形式
+  input.value = item?.username !== '' ? `${mpPrefix} ${item?.username}` : `${mpPrefix} #${item?.uid}`; // 网络请求差时邀请指令将使用#+uid形式
   document.body.appendChild(input);
   input.select();
   document.execCommand('Copy');
@@ -96,8 +96,8 @@ function copyCommand(item) {
 }
 // 初始化页面
 function initView() {
-  if (prop.data) {
-    switch (prop.data.status) {
+  if (props.data) {
+    switch (props.data.status) {
       case 'active':
         tagColor.value = 'cyan';
         break;
@@ -110,8 +110,8 @@ function initView() {
 }
 // 获取玩家信息
 function initUser() {
-  if (prop.data.team) {
-    teamData.value = prop.data.team;
+  if (props.data.team) {
+    teamData.value = props.data.team;
     teamData.value.map((item) => {
       for (let e in item.player) {
         if (typeof item.player[e] === 'number') {

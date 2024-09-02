@@ -4,7 +4,9 @@
 	.ant-layout-content {
 		background: #fff;
 	}
-	.logo{
+
+	.logo {
 		border-inline-end: 1px solid rgba(5, 5, 5, 0.06);
 	}
+
 }

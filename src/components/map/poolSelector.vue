@@ -2,14 +2,14 @@
  * @Author: SIyuyuko
  * @Date: 2024-05-07 22:20:39
  * @LastEditors: SIyuyuko
- * @LastEditTime: 2024-08-26 14:42:20
+ * @LastEditTime: 2024-08-30 16:29:34
  * @FilePath: /tourney-site/src/components/map/poolSelector.vue
  * @Description: 图池选择器组件
 -->
 <template>
   <a-card class="pool-body" v-if="mappool">
     <template #title>
-      <span>{{ poolData?.title + " " + mappool?.title }} Mappool</span>
+      <span>{{ poolData?.title + ' ' + mappool?.title }} Mappool</span>
     </template>
     <template #extra>
       <div class="reset-btn" v-if="isReferee" :title="$t('mappool.reset')" @click="resetMapStatus()">
@@ -26,23 +26,21 @@
           </div>
           <template #overlay>
             <a-menu class="operate-button-menu">
-              <a-menu-item v-for="(pool, index) in poolData.children" :key="index" @click="changeMappool(pool)">{{
-                pool?.title }}</a-menu-item>
+              <a-menu-item v-for="(pool, index) in poolData.children" :key="index" @click="changeMappool(pool)">{{ pool?.title }}</a-menu-item>
             </a-menu>
           </template>
         </a-dropdown>
       </div>
     </template>
     <div class="pool-content">
-      <Map v-for="(map, index) in mappool?.map" :key="index" :item="map" :isCard="true" :isReferee="isReferee"
-        @update="updateMap"></Map>
+      <Map v-for="(map, index) in mappool?.map" :key="index" :item="map" :isCard="true" :isReferee="isReferee" @update="updateMap"></Map>
     </div>
   </a-card>
-  <a-empty v-else :description="$t('mappool.emptyActive')" :image="Empty.PRESENTED_IMAGE_SIMPLE" style="width: 100%;"/>
+  <a-empty v-else :description="$t('mappool.emptyActive')" :image="Empty.PRESENTED_IMAGE_SIMPLE" style="width: 100%" />
 </template>
 
 <script setup name="PoolSelector">
-import { ref, onMounted, nextTick, defineEmits } from 'vue';
+import { ref, onMounted, nextTick } from 'vue';
 import { Empty } from 'ant-design-vue';
 import Map from './map.vue';
 const data = window.mappool; // 图池配置
@@ -53,19 +51,19 @@ let status = ref({}); // 图池状态
 let mappool = ref();
 defineProps({
   isReferee: {
-    type: Boolean
-  }
-})
+    type: Boolean,
+  },
+});
 // 切换图池轮次
 function changeMappool(pool) {
   nextTick(() => {
     mappool.value = pool;
     updateMap();
-  })
+  });
 }
 // 更新谱面
 function updateMap() {
-  emit("update", mappool.value);
+  emit('update', mappool.value);
 }
 // 重置谱面标记状态
 function resetMapStatus() {
@@ -118,7 +116,7 @@ onMounted(() => {
   }
 }
 
-[class*=-btn]:hover {
+[class*='-btn']:hover {
   cursor: pointer;
 }
 
@@ -177,7 +175,7 @@ onMounted(() => {
         align-items: center;
         border-top: 1px solid transparent;
 
-        &>li>span {
+        & > li > span {
           font-size: 10px;
         }
       }
@@ -194,7 +192,7 @@ onMounted(() => {
   row-gap: 10px;
 }
 
-*>input {
+* > input {
   visibility: hidden;
   display: none;
 }
@@ -207,4 +205,5 @@ ul.operate-button-menu {
 
 :deep(.ant-skeleton-content) {
   height: 500px;
-}</style>
+}
+</style>

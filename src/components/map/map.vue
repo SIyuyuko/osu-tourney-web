@@ -2,7 +2,7 @@
  * @Author: SIyuyuko
  * @Date: 2024-05-07 22:17:45
  * @LastEditors: SIyuyuko
- * @LastEditTime: 2024-08-26 14:37:07
+ * @LastEditTime: 2024-09-02 12:34:38
  * @FilePath: /tourney-site/src/components/map/map.vue
  * @Description: 谱面组件
 -->
@@ -18,7 +18,9 @@
           <div class="content left">
             <span class="map-title"
               >{{ map?.data?.beatmapset?.title }}
-              <span v-if="map?.data?.beatmapset?.title !== map?.data?.beatmapset?.title_unicode"> {{ map?.data?.beatmapset?.title_unicode }}</span>
+              <span v-if="map?.data?.beatmapset?.title !== map?.data?.beatmapset?.title_unicode" :title="map?.data?.beatmapset?.title_unicode">
+                {{ map?.data?.beatmapset?.title_unicode }}</span
+              >
             </span>
             <span class="map-people">{{ map?.data?.beatmapset?.artist }} // {{ map?.data?.beatmapset?.creator }}</span>
             <span class="map-id">{{ map?.data?.version }} - b{{ map?.data?.id }}</span>
@@ -157,7 +159,7 @@ function copyCommand(item, type) {
   input.select();
   document.execCommand('Copy');
   input.remove();
-  let e = type === "map" ? 'setMap' : 'getCommand';
+  let e = type === 'map' ? 'setMap' : 'getCommand';
   item[e] = true;
   setTimeout(() => {
     item[e] = false;
@@ -339,6 +341,7 @@ onMounted(() => {
 
   .content-mask .content.left {
     padding: 10px;
+    max-width: 80%;
 
     .map-title {
       font-size: 18px;
