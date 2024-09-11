@@ -2,7 +2,7 @@
  * @Author: SIyuyuko
  * @Date: 2024-08-02 17:55:00
  * @LastEditors: SIyuyuko
- * @LastEditTime: 2024-08-27 13:20:24
+ * @LastEditTime: 2024-09-11 13:56:14
  * @FilePath: /tourney-site/src/views/command/index.vue
  * @Description: 指令列表组件
 -->
@@ -176,7 +176,6 @@ import { CaretRightOutlined } from '@ant-design/icons-vue';
 import { ref, onMounted, computed, watch } from 'vue';
 import PoolSelector from '@/components/map/poolSelector.vue';
 import i18n from '@/language';
-let wikiUrl = 'https://osu.ppy.sh/wiki/zh/osu%21_tournament_client/osu%21tourney/Tournament_management_commands'; // 比赛指令wiki链接
 let commandCopy = ref();
 let defaultCommand = null;
 let commandList = computed({
@@ -234,6 +233,9 @@ let winnerWords = ''; //获胜报幕
 let winPrefix = computed(() => i18n.global.t('command.winPrefix')); //获胜文字前缀
 let winSuffix = computed(() => i18n.global.t('command.winSuffix')); //获胜文字后缀
 let locale = computed(() => i18n.global.locale); //多语言
+let wikiUrl = computed(() => {
+  return `https://osu.ppy.sh/wiki/${locale.value}/osu%21_tournament_client/osu%21tourney/Tournament_management_commands`;
+}); // 比赛指令wiki链接
 // 获取图池列表
 function getMappool(value) {
   if (value) {
@@ -245,7 +247,7 @@ function getMappool(value) {
       });
   }
 }
-onMounted(() => {
+onMounted(() => {                                                                                                                                                                                                                                                                                                                                                                                                                                                    
   commandCopy.value = window.command.list.map((e) => {
     e.value = e.cmd;
     return e;
@@ -324,7 +326,7 @@ watch([narratorSetting, redTeam, blueTeam, redTeamScore, blueTeamScore, pickTeam
   winnerWords = narratorSetting.value.includes('winner') ? `${winPrefix.value}${winner.value}${winSuffix.value}` : '';
   // 监听报幕数组
   if (val.length > 0) {
-    narrator.value = `${scoreWords}${val.length > 1 && val.includes('score') ? '//' : ''}${pickWords}${val.length >= 2 && val.includes('pick') ? '//' : ''}${poolWords}${val.length >= 2 && val.includes('mappool') && val.includes('winner') ? '//' : ''}${winnerWords}`;
+    narrator.value = `${scoreWords}${val.length > 1 && val.includes('score') ? ' // ' : ''}${pickWords}${val.length >= 2 && val.includes('pick') ? ' // ' : ''}${poolWords}${val.length >= 2 && val.includes('mappool') && val.includes('winner') ? ' // ' : ''}${winnerWords}`;
   } else {
     narrator.value = '';
   }

@@ -2,7 +2,7 @@
  * @Author: SIyuyuko
  * @Date: 2024-05-07 22:17:45
  * @LastEditors: SIyuyuko
- * @LastEditTime: 2024-09-02 12:34:38
+ * @LastEditTime: 2024-09-11 16:43:55
  * @FilePath: /tourney-site/src/components/map/map.vue
  * @Description: 谱面组件
 -->
@@ -56,7 +56,7 @@
     </a-card-meta>
     <!-- #region 快捷按钮组 -->
     <template #actions>
-      <div class="website-btn" :title="$t('mappool.seeMapInfo')" @click="openBeatmapWebsite(map?.data?.id)">
+      <div class="website-btn" :title="$t('mappool.seeMapInfo')" @click="openBeatmapWebsite(map?.data?.id ?? map?.id)">
         <font-awesome-icon icon="fa-solid fa-link"></font-awesome-icon>
       </div>
       <div class="copy-btn" :title="$t('mappool.getMapID')" @click="copyBeatmapID(map)">
@@ -117,7 +117,7 @@ function openBeatmapWebsite(bid) {
 // 复制谱面ID
 function copyBeatmapID(item) {
   let input = document.createElement('input');
-  input.value = item.data?.id;
+  input.value = item.data?.id ?? item.id;
   document.body.appendChild(input);
   input.select();
   document.execCommand('Copy');
