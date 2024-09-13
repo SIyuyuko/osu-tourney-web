@@ -2,7 +2,7 @@
  * @Author: SIyuyuko
  * @Date: 2024-08-02 17:55:00
  * @LastEditors: SIyuyuko
- * @LastEditTime: 2024-09-12 15:36:06
+ * @LastEditTime: 2024-09-13 14:32:38
  * @FilePath: /tourney-site/src/views/command/index.vue
  * @Description: 指令列表组件
 -->
@@ -199,7 +199,6 @@ useResizeObserver(viewRef, (entries) => {
   element.value = { width: width, height: height };
 });
 watch(element, (val) => {
-  console.log(val);
   if (val.width > 810) {
     showCommand.value = true;
   }

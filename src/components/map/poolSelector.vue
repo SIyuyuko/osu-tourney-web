@@ -2,7 +2,7 @@
  * @Author: SIyuyuko
  * @Date: 2024-05-07 22:20:39
  * @LastEditors: SIyuyuko
- * @LastEditTime: 2024-08-30 16:29:34
+ * @LastEditTime: 2024-09-13 14:37:38
  * @FilePath: /tourney-site/src/components/map/poolSelector.vue
  * @Description: 图池选择器组件
 -->
@@ -32,16 +32,17 @@
         </a-dropdown>
       </div>
     </template>
-    <div class="pool-content">
-      <Map v-for="(map, index) in mappool?.map" :key="index" :item="map" :isCard="true" :isReferee="isReferee" @update="updateMap"></Map>
+    <div class="pool-content" ref="poolRef">
+      <Map :class="isWrap ? 'wrap' : 'nowrap'" v-for="(map, index) in mappool?.map" :key="index" :item="map" :isCard="true" :isReferee="isReferee" @update="updateMap"></Map>
     </div>
   </a-card>
   <a-empty v-else :description="$t('mappool.emptyActive')" :image="Empty.PRESENTED_IMAGE_SIMPLE" style="width: 100%" />
 </template>
 
 <script setup name="PoolSelector">
-import { ref, onMounted, nextTick } from 'vue';
+import { ref, onMounted, nextTick, watch } from 'vue';
 import { Empty } from 'ant-design-vue';
+import { useResizeObserver } from '@vueuse/core';
 import Map from './map.vue';
 const data = window.mappool; // 图池配置
 const poolName = data.homeMappool;
@@ -49,6 +50,18 @@ const emit = defineEmits(['update']);
 let poolData = ref();
 let status = ref({}); // 图池状态
 let mappool = ref();
+const poolRef = ref(null);
+const element = ref();
+let isWrap = ref(false);
+// 监听元素宽度
+useResizeObserver(poolRef, (entries) => {
+  const entry = entries[0];
+  const { width, height } = entry.contentRect;
+  element.value = { width: width, height: height };
+});
+watch(element, (val) => {
+  isWrap.value = val.width < 400 ? true : false;
+});
 defineProps({
   isReferee: {
     type: Boolean,
@@ -126,6 +139,7 @@ onMounted(() => {
   justify-content: center;
   flex-direction: column;
   width: 100%;
+  max-width: calc(100% - 520px);
 
   :deep(.ant-card-head) {
     padding: 0 20px;
@@ -180,6 +194,9 @@ onMounted(() => {
         }
       }
     }
+    .map-panel.wrap{
+      width: 100%;
+    }
   }
 }
 
@@ -205,5 +222,10 @@ ul.operate-button-menu {
 
 :deep(.ant-skeleton-content) {
   height: 500px;
+}
+@media (max-width: 1024px) {
+  .pool-body {
+    max-width: 100%;
+  }
 }
 </style>
