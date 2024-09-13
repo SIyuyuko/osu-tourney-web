@@ -2,7 +2,7 @@
  * @Author: SIyuyuko
  * @Date: 2024-05-07 22:08:23
  * @LastEditors: SIyuyuko
- * @LastEditTime: 2024-09-02 15:33:13
+ * @LastEditTime: 2024-09-12 17:09:44
  * @FilePath: /tourney-site/src/components/util/cover.vue
  * @Description: 壁纸组件
 -->
@@ -114,11 +114,16 @@ watch(
 }
 [data-theme='light'] {
   .slick-arrow.custom-slick-arrow {
-    color: #141414;
+    color: var(--theme-black);
   }
 
   .slick-arrow.custom-slick-arrow:hover {
-    color: #141414;
+    color: var(--theme-black);
+  }
+}
+@media (max-width: 1024px) {
+  .cover-panel {
+    width: 100%;
   }
 }
 </style>

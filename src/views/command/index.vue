@@ -2,19 +2,23 @@
  * @Author: SIyuyuko
  * @Date: 2024-08-02 17:55:00
  * @LastEditors: SIyuyuko
- * @LastEditTime: 2024-09-11 13:56:14
+ * @LastEditTime: 2024-09-12 15:36:06
  * @FilePath: /tourney-site/src/views/command/index.vue
  * @Description: 指令列表组件
 -->
 <template>
   <div class="page no-scroll">
-    <div class="view">
+    <div class="view" ref="viewRef">
       <div class="command-list" v-if="commandCopy">
         <div class="nav">
           <span>{{ $t('command.list') }}</span>
           <a :href="wikiUrl" target="_blank" :title="$t('command.seeWiki')">wiki</a>
+          <a-button class="expand-btn" type="link" @click="showCommand = !showCommand">
+            <font-awesome-icon v-if="showCommand" icon="fa-solid fa-compress" />
+            <font-awesome-icon v-else icon="fa-solid fa-expand" />
+          </a-button>
         </div>
-        <p class="command" v-for="(item, index) in commandList" :key="index">
+        <p class="command" v-for="(item, index) in commandList" :key="index" :class="showCommand ? '' : 'hidden'">
           <span>{{ index + 1 }}. </span><span>{{ item.name }}</span>
           <a-typography-paragraph v-model:content="commandCopy[index].value" :editable="{ tooltip: false }" :copyable="{ tooltip: false }" keyboard>
             <template #editableIcon>
@@ -41,7 +45,7 @@
           </a-typography-paragraph>
         </p>
       </div>
-      <a-divider type="vertical" style="height: auto"></a-divider>
+      <a-divider :type="showCommand ? 'vertical' : 'horizontal'" style="height: auto" :style="!showCommand ? { margin: '20px 0' } : {}"></a-divider>
       <a-collapse class="referee-list" v-model:activeKey="activeKey" :bordered="false" ghost>
         <template #expandIcon="{ isActive }">
           <caret-right-outlined :rotate="isActive ? 90 : 0" />
@@ -59,12 +63,12 @@
             </div>
             <a-input v-model:value="redTeam" allow-clear :placeholder="$t('command.inputRedTeam')">
               <template #prefix>
-                <font-awesome-icon icon="fa-solid fa-users-line" style="color: #d9363e" />
+                <font-awesome-icon icon="fa-solid fa-users-line" style="color: var(--team-red)" />
               </template>
             </a-input>
             <a-input v-model:value="blueTeam" allow-clear :placeholder="$t('command.inputBlueTeam')">
               <template #prefix>
-                <font-awesome-icon icon="fa-solid fa-users-line" style="color: #0958d9" />
+                <font-awesome-icon icon="fa-solid fa-users-line" style="color: var(--team-blue)" />
               </template>
             </a-input>
             <div class="mode-bar">
@@ -106,8 +110,8 @@
             <div class="vs-header">
               <div>
                 <span :title="redTeam"
-                  ><font-awesome-icon v-if="redTeamScore !== maxWinRound || !redTeamScore" icon="fa-solid fa-users-line" style="color: #d9363e" />
-                  <font-awesome-icon v-else icon="fa-solid fa-crown" style="color: #ffd43b" />
+                  ><font-awesome-icon v-if="redTeamScore !== maxWinRound || !redTeamScore" icon="fa-solid fa-users-line" style="color: var(--team-red)" />
+                  <font-awesome-icon v-else icon="fa-solid fa-crown" style="color: var(--team-winner)" />
                   {{ redTeam }}
                 </span>
                 <a-input-number v-model:value="redTeamScore" :min="0" :max="maxWinRound ? maxWinRound : 100" :bordered="false" />
@@ -118,8 +122,8 @@
               </div>
               <div>
                 <span :title="blueTeam"
-                  ><font-awesome-icon v-if="blueTeamScore !== maxWinRound || !blueTeamScore" icon="fa-solid fa-users-line" style="color: #0958d9" />
-                  <font-awesome-icon v-else icon="fa-solid fa-crown" style="color: #ffd43b" />
+                  ><font-awesome-icon v-if="blueTeamScore !== maxWinRound || !blueTeamScore" icon="fa-solid fa-users-line" style="color: var(--team-blue)" />
+                  <font-awesome-icon v-else icon="fa-solid fa-crown" style="color: var(--team-winner)" />
                   {{ blueTeam }}
                 </span>
                 <a-input-number v-model:value="blueTeamScore" :min="0" :max="maxWinRound ? maxWinRound : 100" :bordered="false" />
@@ -174,6 +178,7 @@
 import { Empty } from 'ant-design-vue';
 import { CaretRightOutlined } from '@ant-design/icons-vue';
 import { ref, onMounted, computed, watch } from 'vue';
+import { useResizeObserver } from '@vueuse/core';
 import PoolSelector from '@/components/map/poolSelector.vue';
 import i18n from '@/language';
 let commandCopy = ref();
@@ -184,6 +189,21 @@ let commandList = computed({
   },
 });
 const activeKey = ref([1, 2]);
+let showCommand = ref(true); // 是否显示指令列表
+const viewRef = ref(null);
+const element = ref();
+// 监听元素宽度
+useResizeObserver(viewRef, (entries) => {
+  const entry = entries[0];
+  const { width, height } = entry.contentRect;
+  element.value = { width: width, height: height };
+});
+watch(element, (val) => {
+  console.log(val);
+  if (val.width > 810) {
+    showCommand.value = true;
+  }
+});
 // 配置项
 let prefix = ref(''); //比赛缩写
 let redTeam = ref(''); //红队队名
@@ -247,12 +267,13 @@ function getMappool(value) {
       });
   }
 }
-onMounted(() => {                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+onMounted(() => {
   commandCopy.value = window.command.list.map((e) => {
     e.value = e.cmd;
     return e;
   });
   defaultCommand = window.command.list;
+  showCommand.value = true;
 });
 // #region 监听配置项更新指令
 // 队伍信息监听
@@ -344,9 +365,16 @@ watch([narratorSetting, redTeam, blueTeam, redTeamScore, blueTeamScore, pickTeam
     position: sticky;
     top: 0;
     z-index: 2;
+    align-items: center;
+    display: flex;
 
     span + a {
       margin: 0 0 0 10px;
+    }
+
+    .expand-btn {
+      visibility: hidden;
+      transition: ease all 0.3s;
     }
   }
 
@@ -468,7 +496,41 @@ watch([narratorSetting, redTeam, blueTeam, redTeamScore, blueTeamScore, pickTeam
 
 [data-theme='dark'] {
   .nav {
-    background-color: #141414;
+    background-color: var(--theme-black);
+  }
+}
+@media (max-width: 900px) {
+  .page {
+    .view {
+      flex-wrap: wrap;
+      display: block;
+      .command-list,
+      .referee-list {
+        width: 100%;
+      }
+      .command-list {
+        position: relative;
+        .nav {
+          position: fixed;
+          top: auto;
+          width: 90%;
+        }
+
+        .expand-btn {
+          visibility: visible;
+          transition: ease all 0.3s;
+        }
+        .nav + .command {
+          margin: 30px 0 0 0;
+        }
+        .command.hidden {
+          display: none;
+        }
+      }
+      .referee-list > div > * {
+        padding: 0;
+      }
+    }
   }
 }
 </style>

@@ -2,7 +2,7 @@
 
 	.ant-layout-header,
 	.ant-layout-content {
-		background: #141414;
+		background: var(--theme-black);
 	}
 
 	.logo {
@@ -10,6 +10,6 @@
 	}
 
 	* {
-		scrollbar-color: rgba(255, 255, 255, 0.1) #141414;
+		scrollbar-color: rgba(255, 255, 255, 0.1) var(--theme-black);
 	}
 }

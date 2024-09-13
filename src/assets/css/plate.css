@@ -1,12 +1,21 @@
+:root {
+	--team-red: #d9363e;
+	--team-blue: #0958d9;
+	--team-winner: #ffd43b;
+	--theme-black: #141414;
+}
+
 .tag.HD {
 	background-color: #fdd835;
 }
 
-.tag.NM,.tag.EZ {
+.tag.NM,
+.tag.EZ {
 	background-color: #4caf50;
 }
 
-.tag.DT,.tag.EX {
+.tag.DT,
+.tag.EX {
 	background-color: #42a5f5;
 }
 
