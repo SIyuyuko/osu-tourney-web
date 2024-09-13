@@ -2,7 +2,7 @@
  * @Author: SIyuyuko
  * @Date: 2024-05-07 22:17:45
  * @LastEditors: SIyuyuko
- * @LastEditTime: 2024-09-11 16:43:55
+ * @LastEditTime: 2024-09-13 11:25:24
  * @FilePath: /tourney-site/src/components/map/map.vue
  * @Description: 谱面组件
 -->
@@ -25,10 +25,10 @@
             <span class="map-people">{{ map?.data?.beatmapset?.artist }} // {{ map?.data?.beatmapset?.creator }}</span>
             <span class="map-id">{{ map?.data?.version }} - b{{ map?.data?.id }}</span>
             <span class="map-detail" v-if="!isCard && map?.params">
-              <span>CS {{ map?.data?.cs }}</span>
-              <span>AR {{ map?.params?.approach_rate }}</span>
-              <span>OD {{ map?.params?.overall_difficulty }}</span>
-              <span>Combo {{ map?.params?.max_combo }}</span>
+              <span :title="`CS ${map?.data?.cs}`">CS {{ map?.data?.cs }}</span>
+              <span :title="`AR ${map?.params?.approach_rate}`">AR {{ map?.params?.approach_rate }}</span>
+              <span :title="`OD ${map?.params?.overall_difficulty}`">OD {{ map?.params?.overall_difficulty }}</span>
+              <span :title="`Combo ${map?.params?.max_combo}`">Combo {{ map?.params?.max_combo }}</span>
             </span>
           </div>
           <div class="content right">
@@ -68,7 +68,7 @@
       </div>
       <div v-else class="check-btn" :title="!map.checkStatus ? $t('mappool.markMap') : $t('mappool.removeMark')" @click="toggleMapStatus(map)">
         <font-awesome-icon v-if="!map.checkStatus" icon="fa-solid fa-circle-check"></font-awesome-icon>
-        <font-awesome-icon v-if="map.checkStatus" icon="fa-solid fa-circle-minus" style="color: #d9363e" />
+        <font-awesome-icon v-if="map.checkStatus" icon="fa-solid fa-circle-minus" style="color: var(--team-red)" />
       </div>
       <div class="copy-btn" :title="$t('mappool.getMapCommand')" @click="copyCommand(map, 'map')">
         <font-awesome-icon icon="fa-solid fa-map" v-show="!map?.setMap" />
@@ -166,19 +166,21 @@ function copyCommand(item, type) {
   }, 1000);
 }
 function initBeatmap(item) {
-  getBeatmapInfo(item.id).then((res) => {
-    if (res.status === 200) {
-      nextTick(() => {
-        map.value = Object.assign(props.item, res.data);
-        // console.log(map);
-        getBeatmapParams(map.value);
-      });
-    } else {
+  getBeatmapInfo(item.id)
+    .then((res) => {
+      if (res.status === 200) {
+        nextTick(() => {
+          map.value = Object.assign(props.item, res.data);
+          // console.log(map);
+          getBeatmapParams(map.value);
+        });
+      }
+    })
+    .catch(() => {
       setTimeout(() => {
         initBeatmap(item);
-      }, 2000);
-    }
-  });
+      }, 1000);
+    });
 }
 async function getBeatmapParams(map) {
   let noModList = ['FM', 'TB', 'EX'];
@@ -378,6 +380,8 @@ onMounted(() => {
   .content-mask .content.right {
     height: auto;
     width: 110px;
+    position: sticky;
+    right: 0;
 
     .tag {
       font-size: 26px;
@@ -501,6 +505,12 @@ ul.operate-button-menu {
         }
       }
     }
+  }
+  .map-panel.detail {
+    width: 100%;
+  }
+  .loading-panel {
+    width: 100%;
   }
 }
 
