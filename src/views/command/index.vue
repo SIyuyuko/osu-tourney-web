@@ -2,7 +2,7 @@
  * @Author: SIyuyuko
  * @Date: 2024-08-02 17:55:00
  * @LastEditors: SIyuyuko
- * @LastEditTime: 2024-09-13 14:32:38
+ * @LastEditTime: 2024-09-14 10:46:16
  * @FilePath: /tourney-site/src/views/command/index.vue
  * @Description: 指令列表组件
 -->
@@ -167,7 +167,7 @@
           </div>
         </a-collapse-panel>
         <a-collapse-panel key="3" :header="$t('command.mappool')">
-          <PoolSelector v-if="mappool" :isReferee="true" @update="getMappool" />
+          <PoolSelector class="pool-selector" v-if="mappool" :isReferee="true" @update="getMappool" />
           <a-empty v-else :description="$t('mappool.empty')" :image="Empty.PRESENTED_IMAGE_SIMPLE" style="width: 100%" />
         </a-collapse-panel>
       </a-collapse>
@@ -485,6 +485,10 @@ watch([narratorSetting, redTeam, blueTeam, redTeamScore, blueTeamScore, pickTeam
   :deep(span + span) {
     margin-inline-start: 4px;
   }
+}
+
+.pool-selector{
+  max-width: 100%;
 }
 
 [data-theme='light'] {
