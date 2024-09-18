@@ -2,7 +2,7 @@
  * @Author: SIyuyuko
  * @Date: 2024-08-02 17:55:00
  * @LastEditors: SIyuyuko
- * @LastEditTime: 2024-09-14 10:46:16
+ * @LastEditTime: 2024-09-18 15:40:49
  * @FilePath: /tourney-site/src/views/command/index.vue
  * @Description: 指令列表组件
 -->
@@ -58,7 +58,6 @@
                   <font-awesome-icon icon="fa-solid fa-chess" />
                 </template>
               </a-input>
-              <!-- <a-input v-model:value="bo" type="number" allow-clear placeholder="Best of" style="width: 30%"> </a-input> -->
               <a-input-number v-model:value="bo" addon-before="Best of" :min="0" style="width: 30%"></a-input-number>
             </div>
             <a-input v-model:value="redTeam" allow-clear :placeholder="$t('command.inputRedTeam')">
@@ -82,6 +81,7 @@
                   <font-awesome-icon icon="fa-solid fa-ranking-star" />
                 </template>
               </a-select>
+              <a-input-number v-model:value="ts" :addon-before="$t('command.teamsize')" :min="1" style="width: calc(50% - 5px)"></a-input-number>
             </div>
             <div class="time-bar">
               <div>
@@ -145,6 +145,26 @@
                 </a-radio-group>
               </div>
             </div>
+            <!-- 对阵信息 -->
+            <div class="narrator-bar">
+              <span>{{ $t('command.bracketTitle') }}</span>
+              <a-typography-text v-if="bracketWords.length > 0" copyable style="white-space: pre-line; display: flex; align-items: center" code>
+                {{ bracketWords }}
+                <template #copyableIcon="{ copied }">
+                  <span v-if="!copied" key="copy-icon">
+                    <font-awesome-icon icon="fa-regular fa-copy" />
+                  </span>
+                  <span v-else key="copied-icon">
+                    <font-awesome-icon icon="fa-solid fa-check" />
+                  </span>
+                </template>
+                <template #copyableTooltip="{ copied }">
+                  <span v-if="!copied" key="copy-tooltip">{{ $t('command.copy') }}</span>
+                  <span v-else key="copied-tooltip">{{ $t('command.copied') }}</span>
+                </template>
+              </a-typography-text>
+            </div>
+            <!-- 报幕配置 -->
             <div class="narrator-bar">
               <span>{{ $t('command.narratorTitle') }}</span>
               <a-checkbox-group v-model:value="narratorSetting" :options="narratorOptions" />
@@ -210,6 +230,7 @@ let blueTeam = ref(''); //蓝队队名
 let teamMode = ref(null); //组队模式
 let scoreMode = ref(null); //计分模式
 let bo = ref(null); //对阵场数
+let ts = ref(1); //队伍人数
 let maxWinRound = ref(null); //比赛胜利场数
 let redTeamScore = ref(0); //红队得分
 let blueTeamScore = ref(0); //蓝队得分
@@ -249,12 +270,18 @@ let scoreWords = ''; //比分报幕
 let pickWords = ''; //选图报幕
 let poolWords = ''; //图池余量报幕
 let winnerWords = ''; //获胜报幕
+let redTeamWord = computed(() => i18n.global.t('command.redTeam')); //红队文字
+let blueTeamWord = computed(() => i18n.global.t('command.blueTeam')); //蓝队文字
+let slotWord = computed(() => i18n.global.t('command.slot')); //格子文字
 let winPrefix = computed(() => i18n.global.t('command.winPrefix')); //获胜文字前缀
 let winSuffix = computed(() => i18n.global.t('command.winSuffix')); //获胜文字后缀
 let locale = computed(() => i18n.global.locale); //多语言
 let wikiUrl = computed(() => {
   return `https://osu.ppy.sh/wiki/${locale.value}/osu%21_tournament_client/osu%21tourney/Tournament_management_commands`;
 }); // 比赛指令wiki链接
+let bracketWords = computed(() => {
+  return `${redTeam.value ? redTeam.value + ':' + redTeamWord.value : redTeamWord.value} & ${slotWord.value} ${ts.value > 1 ? `1-${ts.value}` : 1} // ${blueTeam.value ? blueTeam.value + ':' + blueTeamWord.value : blueTeamWord.value} & ${slotWord.value} ${ts.value > 1 ? `${ts.value + 1}-${ts.value * 2}` : 2}`;
+}); //对阵信息
 // 获取图池列表
 function getMappool(value) {
   if (value) {
@@ -487,7 +514,7 @@ watch([narratorSetting, redTeam, blueTeam, redTeamScore, blueTeamScore, pickTeam
   }
 }
 
-.pool-selector{
+.pool-selector {
   max-width: 100%;
 }
 
